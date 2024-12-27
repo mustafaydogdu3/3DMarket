@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../product/values/localkeys/app_localkeys.dart';
 import '../../splash/view/splash_view.dart';
 
 class AppView extends StatelessWidget {
@@ -8,7 +9,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Material App',
+      title: AppLocalkeys.appName,
       home: SplashView(),
     );
   }
