@@ -2,5 +2,27 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "market3d-3844",
+          "appId": "1:635269786028:android:a54710715cf44e41f17209",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "market3d-3844",
+          "configurations": {
+            "android": "1:635269786028:android:a54710715cf44e41f17209",
+            "ios": "1:635269786028:ios:593c38c4871497f0f17209",
+            "macos": "1:635269786028:ios:593c38c4871497f0f17209",
+            "web": "1:635269786028:web:a777bafd80edf104f17209"
+          }
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "635269786028",
+    "project_id": "market3d-3844",
+    "storage_bucket": "market3d-3844.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635269786028:android:a54710715cf44e41f17209",
+        "android_client_info": {
+          "package_name": "com.example.market3d"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTK4q4SyGLO_0_zR-rd5psjDJb4bIlwGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
