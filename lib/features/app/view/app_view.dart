@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../splash/view/splash_view.dart';
+import '../../auth/home/page/auth_home_page.dart';
 
 class AppView extends StatelessWidget {
   const AppView({super.key});
@@ -10,7 +10,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: AppLocalkeys.appName,
-      home: SplashView(),
+      home: AuthHomePage(),
     );
   }
 }
