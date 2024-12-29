@@ -1,3 +1,4 @@
+import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -29,7 +30,10 @@ class AuthHomePage extends StatelessWidget {
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
                   children: [
-                    const Text(AppLocalkeys.loginTitle),
+                    Text(
+                      AppLocalkeys.loginTitle,
+                      style: BaseTextStyle.titleLarge(),
+                    ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 12),
                       child: ElevatedButton(
