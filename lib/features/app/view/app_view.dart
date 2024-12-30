@@ -2,7 +2,7 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../auth/home/page/auth_home_page.dart';
+import '../../auth/views/home/view/auth_home_view.dart';
 
 class AppView extends StatelessWidget {
   const AppView({super.key});
@@ -13,7 +13,7 @@ class AppView extends StatelessWidget {
     BaseTextStyle.setFont('Roboto');
     return const MaterialApp(
       title: AppLocalkeys.appName,
-      home: AuthHomePage(),
+      home: AuthHomeView(),
     );
   }
 }

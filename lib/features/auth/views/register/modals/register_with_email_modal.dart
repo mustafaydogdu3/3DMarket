@@ -2,11 +2,24 @@ import 'package:core/base/context/extension/context_extension.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../product/values/localkeys/app_localkeys.dart';
-import '../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../../../product/values/localkeys/app_localkeys.dart';
+import '../../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../services/auth_service.dart';
 
-class RegisterWithEmailModal extends StatelessWidget {
+class RegisterWithEmailModal extends StatefulWidget {
   const RegisterWithEmailModal({super.key});
+
+  @override
+  State<RegisterWithEmailModal> createState() => _RegisterWithEmailModalState();
+}
+
+class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
+  final AuthService _authService = AuthService();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _repeatPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +50,7 @@ class RegisterWithEmailModal extends StatelessWidget {
               ],
             ),
             TextFormField(
+              controller: _emailController,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
@@ -49,6 +63,7 @@ class RegisterWithEmailModal extends StatelessWidget {
               ),
             ),
             TextFormField(
+              controller: _passwordController,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
@@ -61,6 +76,7 @@ class RegisterWithEmailModal extends StatelessWidget {
               ),
             ),
             TextFormField(
+              controller: _repeatPasswordController,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
@@ -72,7 +88,13 @@ class RegisterWithEmailModal extends StatelessWidget {
                 prefixIcon: const Icon(Icons.lock),
               ),
             ),
-            PrimaryButtonWidget(onPressed: () {}, text: AppLocalkeys.signUp),
+            PrimaryButtonWidget(
+                onPressed: () async => await _authService.register(
+                      _emailController.text,
+                      _passwordController.text,
+                      _repeatPasswordController.text,
+                    ),
+                text: AppLocalkeys.signUp),
           ],
         ),
       ),

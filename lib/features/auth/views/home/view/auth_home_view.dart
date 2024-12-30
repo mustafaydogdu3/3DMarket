@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../../product/values/localkeys/app_localkeys.dart';
-import '../../../../product/values/paths/app_paths.dart';
-import '../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../../../product/values/localkeys/app_localkeys.dart';
+import '../../../../../product/values/paths/app_paths.dart';
+import '../../../../../product/widgets/buttons/primary_button_widget.dart';
 import '../../login/modals/login_with_email_modal.dart';
 import '../../register/modals/register_with_email_modal.dart';
 
-class AuthHomePage extends StatelessWidget {
-  const AuthHomePage({super.key});
+class AuthHomeView extends StatelessWidget {
+  const AuthHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {

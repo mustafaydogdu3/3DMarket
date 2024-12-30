@@ -2,9 +2,9 @@ import 'package:core/base/context/extension/context_extension.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../product/values/localkeys/app_localkeys.dart';
-import '../../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../forgot_password/page/forgot_password_page.dart';
+import '../../../../../product/values/localkeys/app_localkeys.dart';
+import '../../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../forgot_password/view/forgot_password_view.dart';
 
 class LoginWithEmailModal extends StatelessWidget {
   const LoginWithEmailModal({super.key});
@@ -68,7 +68,7 @@ class LoginWithEmailModal extends StatelessWidget {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordPage(),
+                      builder: (context) => const ForgotPasswordView(),
                     ),
                   ),
                   child: const Text("Forgot Password?"),
