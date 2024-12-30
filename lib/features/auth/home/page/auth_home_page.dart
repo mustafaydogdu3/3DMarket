@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../../product/values/colors/app_colors.dart';
 import '../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../product/values/paths/app_paths.dart';
+import '../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../login/modals/login_with_email_modal.dart';
+import '../../register/modals/register_with_email_modal.dart';
 
 class AuthHomePage extends StatelessWidget {
   const AuthHomePage({super.key});
@@ -97,23 +99,16 @@ class AuthHomePage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: double.infinity,
                       margin: const EdgeInsets.symmetric(horizontal: 12),
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.background,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: const BorderSide(color: AppColors.background),
-                          ),
+                      child: PrimaryButtonWidget(
+                        onPressed: () => showModalBottomSheet(
+                          isScrollControlled: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const LoginWithEmailModal(),
                         ),
-                        child: Text(
-                          AppLocalkeys.loginWithEmail,
-                          style: BaseTextStyle.bodyLarge()
-                              .copyWith(color: Colors.white),
-                        ),
+                        text: AppLocalkeys.loginWithEmail,
                       ),
                     ),
                   ],
@@ -128,7 +123,13 @@ class AuthHomePage extends StatelessWidget {
                   style: BaseTextStyle.bodyMedium(),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => showModalBottomSheet(
+                    isScrollControlled: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const RegisterWithEmailModal(),
+                  ),
                   child: Text(
                     AppLocalkeys.signUp,
                     style: BaseTextStyle.bodyMedium(),
