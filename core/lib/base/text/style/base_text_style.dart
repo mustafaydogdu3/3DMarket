@@ -6,87 +6,113 @@ class BaseTextStyle {
 
   static late BuildContext context;
   static String? _font;
-  static FontWeight? _fontWeight;
 
   static void setContext(BuildContext context) =>
       BaseTextStyle.context = context;
-
   static setFont(String? font) => BaseTextStyle._font = font;
 
-  static setFontWeight(FontWeight weight) => _fontWeight = weight;
-
-  static displayLarge() => context.displayLarge.copyWith(
+  static displayLarge({FontWeight? fontWeight, Color? color}) =>
+      context.displayLarge.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static displayMedium() => context.displayMedium.copyWith(
+  static displayMedium({FontWeight? fontWeight, Color? color}) =>
+      context.displayMedium.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static displaySmall() => context.displaySmall.copyWith(
+  static displaySmall({FontWeight? fontWeight, Color? color}) =>
+      context.displaySmall.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static headlineLarge() => context.headlineLarge.copyWith(
+  static headlineLarge({FontWeight? fontWeight, Color? color}) =>
+      context.headlineLarge.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static headlineMedium() => context.headlineMedium.copyWith(
+  static headlineMedium({FontWeight? fontWeight, Color? color}) =>
+      context.headlineMedium.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static headlineSmall() => context.headlineSmall.copyWith(
+  static headlineSmall({FontWeight? fontWeight, Color? color}) =>
+      context.headlineSmall.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static titleLarge() => context.titleLarge.copyWith(
+  static titleLarge({FontWeight? fontWeight, Color? color}) =>
+      context.titleLarge.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static titleMedium() => context.titleMedium.copyWith(
+  static titleMedium({FontWeight? fontWeight, Color? color}) =>
+      context.titleMedium.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static titleSmall() => context.titleSmall.copyWith(
+  static titleSmall({FontWeight? fontWeight, Color? color}) =>
+      context.titleSmall.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static bodyLarge() => context.bodyLarge.copyWith(
+  static bodyLarge({FontWeight? fontWeight, Color? color}) =>
+      context.bodyLarge.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static bodyMedium() => context.bodyMedium.copyWith(
+  static bodyMedium({FontWeight? fontWeight, Color? color}) =>
+      context.bodyMedium.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static bodySmall() => context.bodySmall.copyWith(
+  static bodySmall({FontWeight? fontWeight, Color? color}) =>
+      context.bodySmall.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static labelLarge() => context.labelLarge.copyWith(
+  static labelLarge({FontWeight? fontWeight, Color? color}) =>
+      context.labelLarge.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static labelMedium() => context.labelMedium.copyWith(
+  static labelMedium({FontWeight? fontWeight, Color? color}) =>
+      context.labelMedium.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 
-  static labelSmall() => context.labelSmall.copyWith(
+  static labelSmall({FontWeight? fontWeight, Color? color}) =>
+      context.labelSmall.copyWith(
         fontFamily: _font,
-        fontWeight: _fontWeight,
+        fontWeight: fontWeight,
+        color: color,
       );
 }

@@ -19,21 +19,31 @@ class AuthHomePage extends StatelessWidget {
           children: [
             Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 48),
-                  child: SvgPicture.asset(
-                    AppPaths.loginIll,
-                    height: MediaQuery.of(context).size.height * 0.27,
-                  ),
-                ),
+                const SizedBox(height: 48),
                 Wrap(
-                  runSpacing: 8,
                   alignment: WrapAlignment.center,
+                  runSpacing: 24,
                   children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 48),
+                      child: SvgPicture.asset(
+                        AppPaths.loginIll,
+                        height: MediaQuery.of(context).size.height * 0.27,
+                      ),
+                    ),
                     Text(
                       AppLocalkeys.loginTitle,
-                      style: BaseTextStyle.titleLarge(),
+                      style: BaseTextStyle.headlineMedium(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Wrap(
+                  runSpacing: 34,
+                  alignment: WrapAlignment.center,
+                  children: [
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 12),
                       child: ElevatedButton(
@@ -48,13 +58,14 @@ class AuthHomePage extends StatelessWidget {
                           child: Stack(
                             alignment: AlignmentDirectional.center,
                             children: [
-                              const SizedBox(
+                              SizedBox(
                                 height: 50,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       AppLocalkeys.loginWithGoogle,
+                                      style: BaseTextStyle.bodyLarge(),
                                     ),
                                   ],
                                 ),
@@ -69,37 +80,59 @@ class AuthHomePage extends StatelessWidget {
                             ],
                           )),
                     ),
-                  ],
-                ),
-                const Text(AppLocalkeys.or),
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: AppColors.background),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          const Expanded(child: Divider()),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              AppLocalkeys.or,
+                              style: BaseTextStyle.bodyMedium(),
+                            ),
+                          ),
+                          const Expanded(child: Divider()),
+                        ],
                       ),
                     ),
-                    child: const Text(
-                      AppLocalkeys.loginWithEmail,
-                      style: TextStyle(color: Colors.white),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 12),
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.background,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            side: const BorderSide(color: AppColors.background),
+                          ),
+                        ),
+                        child: Text(
+                          AppLocalkeys.loginWithEmail,
+                          style: BaseTextStyle.bodyLarge()
+                              .copyWith(color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(AppLocalkeys.dontHaveAnAccount),
+                Text(
+                  AppLocalkeys.dontHaveAnAccount,
+                  style: BaseTextStyle.bodyMedium(),
+                ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text(AppLocalkeys.signUp),
+                  child: Text(
+                    AppLocalkeys.signUp,
+                    style: BaseTextStyle.bodyMedium(),
+                  ),
                 ),
               ],
             )
