@@ -107,14 +107,26 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       if (_formKey.currentState!.validate()) {
+                        final scaffoldMessenger =
+                            ScaffoldMessenger.of(Navigator.of(context).context);
                         final String? error = await _authService.register(
                           _emailController.text,
                           _passwordController.text,
                           _repeatPasswordController.text,
                         );
-                        if (error != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(error)),
+                        if (error != null && mounted) {
+                          scaffoldMessenger.showSnackBar(
+                            SnackBar(
+                              content: Text(error),
+                              margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom +
+                                        16,
+                                left: 16,
+                                right: 16,
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            ),
                           );
                         }
                       }
