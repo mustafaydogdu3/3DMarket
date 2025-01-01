@@ -1,25 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  Future<void> register(
+  Future<String?> register(
     String email,
     String password,
     String repeatPassword,
   ) async {
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      return null;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+      if (e.code == 'email-already-in-use') {
+        return 'The account already exists for that email.';
+      } else {
+        return 'Authentication failed!';
       }
     } catch (e) {
-      print(e);
+      return 'Unexpected error occurred!';
     }
   }
 }

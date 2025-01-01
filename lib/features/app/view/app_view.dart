@@ -7,13 +7,16 @@ import '../../auth/views/home/view/auth_home_view.dart';
 class AppView extends StatelessWidget {
   const AppView({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     BaseTextStyle.setContext(context);
     BaseTextStyle.setFont('Roboto');
-    return const MaterialApp(
+    return MaterialApp(
+      navigatorKey: navigatorKey,
       title: AppLocalkeys.appName,
-      home: AuthHomeView(),
+      home: const AuthHomeView(),
     );
   }
 }

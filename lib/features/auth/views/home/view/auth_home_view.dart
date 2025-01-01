@@ -128,7 +128,7 @@ class AuthHomeView extends StatelessWidget {
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     context: context,
                     backgroundColor: Colors.transparent,
-                    builder: (context) => const RegisterWithEmailModal(),
+                    builder: (modalContext) => const RegisterWithEmailModal(),
                   ),
                   child: Text(
                     AppLocalkeys.signUp,
