@@ -22,4 +22,25 @@ class AuthService {
       return 'Unexpected error occurred!';
     }
   }
+
+  Future<String?> login(String email, String password) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-credential' ||
+          e.code == 'user-not-found' ||
+          e.code == 'wrong-password') {
+        return 'Wrong password or invalid email!';
+      } else {
+        return 'Authentication failed!';
+      }
+    } catch (e) {
+      return 'Unexpected error occurred!';
+    }
+  }
 }

@@ -9,19 +9,28 @@ class Validator {
         return "Invalid email!";
       }
     }
+
     return "Cannot be left blank!";
   }
 
-  static String? password(String? input, String repeatPassword) {
+  static String? password(
+    String? input, {
+    String? repeatPassword,
+  }) {
     if (input == null || input.isEmpty) {
       return "Cannot be left blank!";
     }
+
     if (input.length < 6) {
       return "Password must be at least 6 characters!";
     }
-    if (input != repeatPassword) {
-      return "Passwords do not match!";
+
+    if (repeatPassword != null) {
+      if (input != repeatPassword) {
+        return "Passwords do not match!";
+      }
     }
+
     return null;
   }
 
@@ -29,12 +38,15 @@ class Validator {
     if (input == null || input.isEmpty) {
       return "Cannot be left blank!";
     }
+
     if (input.length < 6) {
       return "Password must be at least 6 characters!";
     }
+
     if (input != password) {
       return "Passwords do not match!";
     }
+
     return null;
   }
 }

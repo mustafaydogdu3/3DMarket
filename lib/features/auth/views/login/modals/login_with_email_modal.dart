@@ -1,13 +1,29 @@
 import 'package:core/base/context/extension/context_extension.dart';
 import 'package:core/base/text/style/base_text_style.dart';
+import 'package:core/widgets/snackbar/base_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../product/validators/validator.dart';
 import '../../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../../home/view/home_view.dart';
+import '../../../services/auth_service.dart';
 import '../../forgot_password/view/forgot_password_view.dart';
 
-class LoginWithEmailModal extends StatelessWidget {
+class LoginWithEmailModal extends StatefulWidget {
   const LoginWithEmailModal({super.key});
+
+  @override
+  State<LoginWithEmailModal> createState() => _LoginWithEmailModalState();
+}
+
+class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
+  final AuthService _authService = AuthService();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,62 +37,109 @@ class LoginWithEmailModal extends StatelessWidget {
             top: Radius.circular(24),
           ),
         ),
-        child: Wrap(
-          runSpacing: 18,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalkeys.loginWithEmail,
-                  style: BaseTextStyle.titleLarge(),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
+        child: Form(
+          key: _formKey,
+          child: Wrap(
+            runSpacing: 18,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalkeys.loginWithEmail,
+                    style: BaseTextStyle.titleLarge(),
                   ),
-                ),
-                labelStyle: BaseTextStyle.bodyMedium(),
-                labelText: AppLocalkeys.email,
-                prefixIcon: const Icon(Icons.email),
-              ),
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close),
                   ),
-                ),
-                labelStyle: BaseTextStyle.bodyMedium(),
-                labelText: AppLocalkeys.password,
-                prefixIcon: const Icon(Icons.lock),
+                ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordView(),
+              TextFormField(
+                validator: Validator.email,
+                controller: _emailController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
                     ),
                   ),
-                  child: const Text("Forgot Password?"),
+                  labelStyle: BaseTextStyle.bodyMedium(),
+                  labelText: AppLocalkeys.email,
+                  prefixIcon: const Icon(Icons.email),
                 ),
-              ],
-            ),
-            PrimaryButtonWidget(onPressed: () {}, text: "Login"),
-          ],
+              ),
+              TextFormField(
+                validator: (value) => Validator.password(value),
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  labelStyle: BaseTextStyle.bodyMedium(),
+                  labelText: AppLocalkeys.password,
+                  prefixIcon: const Icon(Icons.lock),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordView(),
+                      ),
+                    ),
+                    child: const Text("Forgot Password?"),
+                  ),
+                ],
+              ),
+              PrimaryButtonWidget(
+                onPressed: () async {
+                  FocusScope.of(context).unfocus();
+
+                  if (_formKey.currentState!.validate()) {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => const PopScope(
+                        canPop: false,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+
+                    final String? error = await _authService.login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+
+                    if (!context.mounted) return;
+
+                    Navigator.pop(context);
+
+                    if (error == null) {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeView(),
+                        ),
+                      );
+                    } else {
+                      BaseSnackbarWidget.showOverlaySnackBar(context, error);
+                    }
+                  }
+                },
+                text: AppLocalkeys.signUp,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:core/base/context/extension/context_extension.dart';
 import 'package:core/base/text/style/base_text_style.dart';
+import 'package:core/widgets/snackbar/base_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../product/validators/validator.dart';
@@ -27,49 +28,11 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
   final TextEditingController _repeatPasswordController =
       TextEditingController();
 
-  void _showOverlaySnackBar(
-    BuildContext context,
-    String message,
-  ) {
-    final overlay = Overlay.of(context);
-
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: MediaQuery.of(context).padding.top + 16,
-        left: 16,
-        right: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.error,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay.insert(overlayEntry);
-
-    Future.delayed(const Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: context.keyboardHeight),
       padding: const EdgeInsets.all(16),
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.85,
-      ),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(
@@ -111,8 +74,10 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
                 ),
               ),
               TextFormField(
-                validator: (value) =>
-                    Validator.password(value, _repeatPasswordController.text),
+                validator: (value) => Validator.password(
+                  value,
+                  repeatPassword: _repeatPasswordController.text,
+                ),
                 controller: _passwordController,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(
@@ -176,7 +141,7 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
                         ),
                       );
                     } else {
-                      _showOverlaySnackBar(context, error);
+                      BaseSnackbarWidget.showOverlaySnackBar(context, error);
                     }
                   }
                 },
