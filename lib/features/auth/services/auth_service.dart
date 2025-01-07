@@ -43,4 +43,15 @@ class AuthService {
       return 'Unexpected error occurred!';
     }
   }
+
+  Future<String?> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return 'Failed to send password reset email: ${e.message}';
+    } catch (e) {
+      return 'An unexpected error occurred';
+    }
+  }
 }

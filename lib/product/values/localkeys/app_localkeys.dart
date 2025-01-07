@@ -13,4 +13,5 @@ class AppLocalkeys {
   static const enterEmailText =
       'Enter your email id for verification process, We will send 4 digit code to your email';
   static const continueText = 'Continue';
+  static const login = 'Login';
 }

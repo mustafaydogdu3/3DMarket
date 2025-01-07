@@ -11,7 +11,9 @@ import '../../../services/auth_service.dart';
 import '../../forgot_password/view/forgot_password_view.dart';
 
 class LoginWithEmailModal extends StatefulWidget {
-  const LoginWithEmailModal({super.key});
+  const LoginWithEmailModal({
+    super.key,
+  });
 
   @override
   State<LoginWithEmailModal> createState() => _LoginWithEmailModalState();
@@ -99,8 +101,6 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
               ),
               PrimaryButtonWidget(
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
-
                   if (_formKey.currentState!.validate()) {
                     showDialog(
                       context: context,
@@ -136,7 +136,7 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
                     }
                   }
                 },
-                text: AppLocalkeys.signUp,
+                text: AppLocalkeys.login,
               ),
             ],
           ),
