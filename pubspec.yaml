@@ -20,6 +20,7 @@ dependencies:
   # FIREBASE 
   firebase_core: ^3.9.0
   firebase_auth: ^5.3.4
+  cloud_firestore: ^5.6.1
 
   # Utils
   flutter_svg: ^2.0.16
