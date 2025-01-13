@@ -22,10 +22,18 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _passwordVisible = false;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
+
+  @override
+  void initState() {
+    _passwordVisible = false;
+    super.initState();
+  }
 
   void _showOverlaySnackBar(
     BuildContext context,
@@ -111,10 +119,22 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
                 ),
               ),
               TextFormField(
+                keyboardType: TextInputType.text,
+                obscureText: !_passwordVisible,
                 validator: (value) => Validator.password(value,
                     repeatPassword: _repeatPasswordController.text),
                 controller: _passwordController,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                    icon: Icon(_passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
@@ -126,10 +146,22 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
                 ),
               ),
               TextFormField(
+                keyboardType: TextInputType.text,
+                obscureText: !_passwordVisible,
                 validator: (value) =>
                     Validator.repeatPassword(value, _passwordController.text),
                 controller: _repeatPasswordController,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                    icon: Icon(_passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),

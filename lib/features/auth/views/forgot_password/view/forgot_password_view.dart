@@ -77,8 +77,20 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
                       if (error == null) {
                         Navigator.popUntil(context, (route) => route.isFirst);
+                        BaseSnackbarWidget.showOverlaySnackBar(
+                          context: context,
+                          message:
+                              '${AppLocalkeys.passwordResetMessage} ${_emailController.text}',
+                          backgroundColor: Colors.green,
+                          style: BaseTextStyle.labelLarge(),
+                        );
                       } else {
-                        BaseSnackbarWidget.showOverlaySnackBar(context, error);
+                        BaseSnackbarWidget.showOverlaySnackBar(
+                          context: context,
+                          message: error,
+                          backgroundColor: Colors.red,
+                          style: BaseTextStyle.labelLarge(),
+                        );
                       }
                     }
                   },

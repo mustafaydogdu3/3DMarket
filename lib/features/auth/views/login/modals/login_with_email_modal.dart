@@ -24,8 +24,16 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _passwordVisible = false;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordVisible = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +80,21 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
                 ),
               ),
               TextFormField(
+                keyboardType: TextInputType.text,
+                obscureText: !_passwordVisible,
                 validator: (value) => Validator.password(value),
                 controller: _passwordController,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                    icon: Icon(_passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
@@ -132,7 +152,12 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
                         ),
                       );
                     } else {
-                      BaseSnackbarWidget.showOverlaySnackBar(context, error);
+                      BaseSnackbarWidget.showOverlaySnackBar(
+                        context: context,
+                        message: error,
+                        backgroundColor: Colors.red,
+                        style: BaseTextStyle.labelLarge(),
+                      );
                     }
                   }
                 },
