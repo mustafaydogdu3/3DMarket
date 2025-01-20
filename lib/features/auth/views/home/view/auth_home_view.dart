@@ -25,8 +25,8 @@ class AuthHomeView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
+                  spacing: 24,
                   children: [
-                    const SizedBox(height: 48),
                     Wrap(
                       alignment: WrapAlignment.center,
                       runSpacing: 24,
@@ -46,10 +46,8 @@ class AuthHomeView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-                    Wrap(
-                      runSpacing: 34,
-                      alignment: WrapAlignment.center,
+                    Column(
+                      spacing: 34,
                       children: [
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 12),
