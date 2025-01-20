@@ -15,6 +15,7 @@ class AppView extends StatelessWidget {
     BaseTextStyle.setFont('Roboto');
     return MaterialApp(
       navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
       title: AppLocalkeys.appName,
       home: const AuthHomeView(),
     );

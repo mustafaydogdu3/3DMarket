@@ -15,4 +15,10 @@ class AppLocalkeys {
   static const continueText = 'Continue';
   static const login = 'Login';
   static const passwordResetMessage = 'Password reset email has been sent to';
+  static const name = 'Name';
+  static const emailId = 'Email';
+  static const mobileNumber = 'Mobile Number';
+  static const location = 'Location';
+  static const editProfil = 'Edit Profile';
+  static const saveChanges = 'Save Changes';
 }

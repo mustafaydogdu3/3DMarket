@@ -8,13 +8,15 @@ class AuthService {
     String repeatPassword,
   ) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       await FirebaseFirestore.instance.collection('users').add(
         {
+          'id': userCredential.user?.uid,
           'email': email,
         },
       );
@@ -61,5 +63,11 @@ class AuthService {
     } catch (e) {
       return 'An unexpected error occurred';
     }
+  }
+
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {}
   }
 }
