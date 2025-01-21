@@ -9,6 +9,7 @@ class ProfileService {
     required String email,
     required String phoneNumber,
     required String address,
+    required String gender,
   }) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -28,6 +29,7 @@ class ProfileService {
         'email': email,
         'phoneNumber': phoneNumber,
         'address': address,
+        'gender': gender,
       });
     } catch (e) {
       throw Exception('Failed to save user profile: $e');

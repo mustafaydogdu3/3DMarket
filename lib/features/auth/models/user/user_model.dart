@@ -5,12 +5,14 @@ class UserModel {
     required this.address,
     required this.phoneNumber,
     required this.id,
+    required this.gender,
   });
   String? id;
   String? name;
   String? email;
   String? phoneNumber;
   String? address;
+  String? gender;
 
   UserModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -18,6 +20,7 @@ class UserModel {
     phoneNumber = json['phoneNumber'];
     address = json['address'];
     id = json['id'];
+    gender = json['gender'];
   }
 
   Map<String, dynamic> toJson() {
@@ -27,6 +30,7 @@ class UserModel {
     data['phoneNumber'] = phoneNumber;
     data['address'] = address;
     data['id'] = id;
+    data['gender'] = gender;
     return data;
   }
 }

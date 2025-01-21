@@ -66,6 +66,7 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
                 ],
               ),
               TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 validator: Validator.email,
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -80,7 +81,7 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
                 ),
               ),
               TextFormField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.visiblePassword,
                 obscureText: !_passwordVisible,
                 validator: (value) => Validator.password(value),
                 controller: _passwordController,

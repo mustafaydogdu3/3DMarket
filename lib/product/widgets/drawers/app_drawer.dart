@@ -1,7 +1,10 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
+import '../../../features/auth/services/auth_service.dart';
+import '../../../features/auth/views/home/view/auth_home_view.dart';
 import '../../../features/home/view/home_view.dart';
+import '../../../features/profile/services/profile_service.dart';
 import '../../../features/profile/views/profile_view.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -24,30 +27,41 @@ class AppDrawer extends StatelessWidget {
                   builder: (context) => const ProfileView(),
                 ),
               ),
-              child: Row(
-                spacing: 16,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    child: Image.asset('assets/images/png/profil.png'),
-                  ),
-                  Column(
-                    spacing: 8,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Omer Yilmaz',
-                        style: BaseTextStyle.bodyLarge(),
-                      ),
-                      Text(
-                        '+90 555 123 45 67',
-                        style: BaseTextStyle.bodyMedium(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              child: FutureBuilder(
+                  future: ProfileService().getUserProfile(),
+                  builder: (context, snap) {
+                    switch (snap.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        return Row(
+                          spacing: 16,
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              child:
+                                  Image.asset('assets/images/png/profil.png'),
+                            ),
+                            Column(
+                              spacing: 8,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snap.data?.name ?? '',
+                                  style: BaseTextStyle.bodyLarge(),
+                                ),
+                                Text(
+                                  snap.data?.phoneNumber ?? '',
+                                  style: BaseTextStyle.bodyMedium(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                    }
+                  }),
             ),
           ),
           ListTile(
@@ -64,7 +78,13 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
             onTap: () {
-              Navigator.pop(context);
+              AuthService().logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AuthHomeView(),
+                ),
+              );
             },
           ),
         ],

@@ -8,32 +8,22 @@ import '../../../../../product/widgets/buttons/primary_button_widget.dart';
 import '../../../../home/view/home_view.dart';
 import '../../../services/auth_service.dart';
 
-class RegisterWithEmailModal extends StatefulWidget {
+class RegisterWithEmailModal extends StatelessWidget {
   const RegisterWithEmailModal({
     super.key,
   });
 
-  @override
-  State<RegisterWithEmailModal> createState() => _RegisterWithEmailModalState();
-}
+  static final AuthService _authService = AuthService();
 
-class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
-  final AuthService _authService = AuthService();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final TextEditingController _emailController = TextEditingController();
 
-  bool _passwordVisible = false;
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _repeatPasswordController =
+  static final TextEditingController _passwordController =
       TextEditingController();
 
-  @override
-  void initState() {
-    _passwordVisible = false;
-    super.initState();
-  }
+  static final TextEditingController _repeatPasswordController =
+      TextEditingController();
 
   void _showOverlaySnackBar(
     BuildContext context,
@@ -118,59 +108,21 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
                   prefixIcon: const Icon(Icons.email),
                 ),
               ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                obscureText: !_passwordVisible,
-                validator: (value) => Validator.password(value,
-                    repeatPassword: _repeatPasswordController.text),
+              PasswordFormFieldWidget(
                 controller: _passwordController,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
-                    icon: Icon(_passwordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                  ),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  labelStyle: BaseTextStyle.bodyMedium(),
-                  labelText: AppLocalkeys.password,
-                  prefixIcon: const Icon(Icons.lock),
+                labelText: AppLocalkeys.password,
+                validator: (value) => Validator.password(
+                  value,
+                  repeatPassword: _repeatPasswordController.text,
                 ),
               ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                obscureText: !_passwordVisible,
-                validator: (value) =>
-                    Validator.repeatPassword(value, _passwordController.text),
+              PasswordFormFieldWidget(
                 controller: _repeatPasswordController,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
-                    icon: Icon(_passwordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                  ),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  labelStyle: BaseTextStyle.bodyMedium(),
-                  labelText: AppLocalkeys.confirmPassowrd,
-                  prefixIcon: const Icon(Icons.lock),
+                validator: (value) => Validator.repeatPassword(
+                  value,
+                  _passwordController.text,
                 ),
+                labelText: AppLocalkeys.confirmPassowrd,
               ),
               PrimaryButtonWidget(
                 onPressed: () async {
@@ -217,6 +169,56 @@ class _RegisterWithEmailModalState extends State<RegisterWithEmailModal> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PasswordFormFieldWidget extends StatefulWidget {
+  const PasswordFormFieldWidget({
+    super.key,
+    required this.labelText,
+    required this.controller,
+    this.validator,
+  });
+
+  final String? Function(String?)? validator;
+  final TextEditingController controller;
+  final String labelText;
+
+  @override
+  State<PasswordFormFieldWidget> createState() =>
+      _PasswordFormFieldWidgetState();
+}
+
+class _PasswordFormFieldWidgetState extends State<PasswordFormFieldWidget> {
+  bool _passwordVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      obscureText: !_passwordVisible,
+      validator: widget.validator,
+      controller: widget.controller,
+      decoration: InputDecoration(
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
+          icon:
+              Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+        ),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+        labelStyle: BaseTextStyle.bodyMedium(),
+        labelText: widget.labelText,
+        prefixIcon: const Icon(Icons.lock),
       ),
     );
   }

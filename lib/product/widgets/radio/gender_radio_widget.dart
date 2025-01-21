@@ -4,26 +4,26 @@ import 'package:flutter/material.dart';
 class GenderRadioWidget extends StatefulWidget {
   const GenderRadioWidget({
     super.key,
+    required this.gender,
+    this.onChanged,
   });
+
+  final String? gender;
+  final void Function(String?)? onChanged;
 
   @override
   State<GenderRadioWidget> createState() => _GenderRadioWidgetState();
 }
 
 class _GenderRadioWidgetState extends State<GenderRadioWidget> {
-  String gender = "Male";
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Radio(
           value: 'Male',
-          groupValue: gender,
-          onChanged: (value) {
-            setState(() {
-              gender = value.toString();
-            });
-          },
+          groupValue: widget.gender,
+          onChanged: widget.onChanged,
         ),
         Text(
           'Male',
@@ -31,12 +31,8 @@ class _GenderRadioWidgetState extends State<GenderRadioWidget> {
         ),
         Radio(
           value: 'Female',
-          groupValue: gender,
-          onChanged: (value) {
-            setState(() {
-              gender = value.toString();
-            });
-          },
+          groupValue: widget.gender,
+          onChanged: widget.onChanged,
         ),
         Text(
           'Female',
