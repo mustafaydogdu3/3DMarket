@@ -2,6 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
+  bool authCheck() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<String?> register(
     String email,
     String password,

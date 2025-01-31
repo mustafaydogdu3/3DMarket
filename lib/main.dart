@@ -5,6 +5,8 @@ import 'features/app/view/app_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
+
   runApp(const AppView());
 }
