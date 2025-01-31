@@ -9,7 +9,7 @@ class ProfileService {
     required String email,
     required String phoneNumber,
     required String address,
-    required String gender,
+    required String? gender,
   }) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;

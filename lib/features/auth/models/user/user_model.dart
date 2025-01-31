@@ -7,12 +7,24 @@ class UserModel {
     required this.id,
     required this.gender,
   });
+
   String? id;
   String? name;
   String? email;
   String? phoneNumber;
   String? address;
   String? gender;
+
+  factory UserModel.empty() {
+    return UserModel(
+      name: '',
+      email: '',
+      address: '',
+      phoneNumber: '',
+      id: '',
+      gender: '',
+    );
+  }
 
   UserModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
