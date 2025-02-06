@@ -1,26 +1,28 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../features/profile/views/profile_view.dart';
-
-class GenderRadioWidget extends StatelessWidget {
+class GenderRadioWidget extends StatefulWidget {
   const GenderRadioWidget({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+  State<GenderRadioWidget> createState() => _GenderRadioWidgetState();
+}
 
+String? gender;
+
+class _GenderRadioWidgetState extends State<GenderRadioWidget> {
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Radio(
           value: 'Male',
-          groupValue: profileProvider.gender,
-          onChanged: (value) async =>
-              await profileProvider.updateGender(value ?? 'Male'),
+          groupValue: gender,
+          onChanged: (value) => setState(() {
+            gender = value;
+          }),
         ),
         Text(
           'Male',
@@ -28,9 +30,10 @@ class GenderRadioWidget extends StatelessWidget {
         ),
         Radio(
           value: 'Female',
-          groupValue: profileProvider.gender,
-          onChanged: (value) async =>
-              await profileProvider.updateGender(value ?? 'Female'),
+          groupValue: gender,
+          onChanged: (value) => setState(() {
+            gender = value;
+          }),
         ),
         Text(
           'Female',

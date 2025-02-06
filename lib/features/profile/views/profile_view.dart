@@ -1,13 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/base/text/style/base_text_style.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
 import '../../../product/widgets/buttons/primary_button_widget.dart';
 import '../../../product/widgets/drawers/app_drawer.dart';
-import '../../../product/widgets/radio/gender_radio_widget.dart';
 import '../services/profile_service.dart';
 
 class ProfileView extends StatefulWidget {
@@ -27,8 +23,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppLocalkeys.editProfil),
@@ -148,9 +142,6 @@ class _ProfileViewState extends State<ProfileView> {
                       "Gender",
                       style: BaseTextStyle.labelLarge(),
                     ),
-                    profileProvider.isLoading
-                        ? const CircularProgressIndicator()
-                        : const GenderRadioWidget(),
                     PrimaryButtonWidget(
                       onPressed: () async {
                         final name = nameController.text.trim();
@@ -202,30 +193,5 @@ class _ProfileViewState extends State<ProfileView> {
         ),
       ),
     );
-  }
-}
-
-class ProfileProvider with ChangeNotifier {
-  String _gender = '';
-  final bool _isLoading = false;
-  final userId = FirebaseAuth.instance.currentUser?.uid;
-
-  String get gender => _gender;
-  bool get isLoading => _isLoading;
-
-  Future<void> updateGender(String newGender) async {
-    _gender = newGender;
-    notifyListeners();
-
-    try {
-      final query = await FirebaseFirestore.instance
-          .collection('users')
-          .where('id', isEqualTo: userId)
-          .get();
-
-      query.docs.first.reference.update({'gender': newGender});
-    } catch (e) {
-      print('Error updating gender: $e');
-    }
   }
 }
