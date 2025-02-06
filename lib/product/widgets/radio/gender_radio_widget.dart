@@ -1,18 +1,16 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
-class GenderRadioWidget extends StatefulWidget {
+class GenderRadioWidget extends StatelessWidget {
   const GenderRadioWidget({
     super.key,
+    required this.gender,
+    required this.onChanged,
   });
 
-  @override
-  State<GenderRadioWidget> createState() => _GenderRadioWidgetState();
-}
+  final String? gender;
+  final void Function(String? value)? onChanged;
 
-String? gender;
-
-class _GenderRadioWidgetState extends State<GenderRadioWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,9 +18,7 @@ class _GenderRadioWidgetState extends State<GenderRadioWidget> {
         Radio(
           value: 'Male',
           groupValue: gender,
-          onChanged: (value) => setState(() {
-            gender = value;
-          }),
+          onChanged: onChanged,
         ),
         Text(
           'Male',
@@ -31,9 +27,7 @@ class _GenderRadioWidgetState extends State<GenderRadioWidget> {
         Radio(
           value: 'Female',
           groupValue: gender,
-          onChanged: (value) => setState(() {
-            gender = value;
-          }),
+          onChanged: onChanged,
         ),
         Text(
           'Female',

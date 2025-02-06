@@ -5,7 +5,7 @@ import '../../../features/auth/services/auth_service.dart';
 import '../../../features/auth/views/home/view/auth_home_view.dart';
 import '../../../features/home/view/home_view.dart';
 import '../../../features/profile/services/profile_service.dart';
-import '../../../features/profile/views/profile_view.dart';
+import '../../../features/profile/views/my_profile_view.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -24,7 +24,7 @@ class AppDrawer extends StatelessWidget {
               onPressed: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProfileView(),
+                  builder: (context) => const MyProfileView(),
                 ),
               ),
               child: FutureBuilder(
