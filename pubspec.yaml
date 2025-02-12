@@ -25,6 +25,7 @@ dependencies:
 
   # Utils
   flutter_svg: ^2.0.16
+  uuid: ^4.5.1
 
   # UI
   icons_plus: ^5.0.0

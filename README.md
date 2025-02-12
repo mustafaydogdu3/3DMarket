@@ -8,3 +8,12 @@
 - [Riverpod](https://pub.dev/packages/riverpod)
 - [Provider](https://pub.dev/packages/provider)
 
+Primitive Type (int, String, double, boolean)
+
+Error Handling
+
+Id (Primary Key PK)
+Foreign Key FK
+
+projeye özgü widget'ları 'App' şeklinde
+core yapıları ise 'Base' şeklinde adlandırabiliriz.

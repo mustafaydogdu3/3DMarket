@@ -49,4 +49,34 @@ class Validator {
 
     return null;
   }
+
+  static String? stringInput(String? input) {
+    if (input == null || input.isEmpty) {
+      return "Cannot be left blank!";
+    }
+    return null;
+  }
+
+  static String? phone(String? input) {
+    if (input != null && input.isNotEmpty) {
+      if (RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(input)) {
+        return null;
+      } else {
+        return "Invalid phone number";
+      }
+    }
+    return "Cannot be left blank!";
+  }
+
+  static String? zipCode(String? input) {
+    if (input == null || input.isEmpty) {
+      return "Cannot be left blank!";
+    }
+
+    if (!RegExp(r'^[0-9]{4,10}$').hasMatch(input)) {
+      return "Invalid postal code!";
+    }
+
+    return null;
+  }
 }
