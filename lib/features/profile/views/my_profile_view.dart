@@ -177,6 +177,8 @@ class _MyProfileViewState extends State<MyProfileView> {
                                           builder: (context) =>
                                               const AddressesView(),
                                         ),
+                                      ).then(
+                                        (_) => setState(() {}),
                                       ),
                                       child: Row(
                                         spacing: 8,
@@ -197,186 +199,198 @@ class _MyProfileViewState extends State<MyProfileView> {
                                   ],
                                 ),
                                 Card(
-                                    child: defaultAddress != null
-                                        ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                padding: const EdgeInsets.only(
-                                                  left: 16,
-                                                  top: 16,
-                                                ),
-                                                child: Text(
-                                                  defaultAddress.title ?? '',
-                                                  style:
-                                                      BaseTextStyle.bodyLarge(
-                                                    color: Colors.grey[700],
-                                                  ),
+                                  child: defaultAddress != null
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                left: 16,
+                                                top: 16,
+                                              ),
+                                              child: Text(
+                                                defaultAddress.title ?? '',
+                                                style: BaseTextStyle.bodyLarge(
+                                                  color: Colors.grey[700],
                                                 ),
                                               ),
-                                              ListTile(
-                                                title: Text(
-                                                    defaultAddress.name ?? ''),
-                                                subtitle: Text(
-                                                    '${defaultAddress.streetDetails}, ${defaultAddress.city}'),
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AddAddressView(
-                                                          title: defaultAddress
-                                                              .title,
-                                                          name: defaultAddress
-                                                              .name,
-                                                          phone: defaultAddress
-                                                              .phoneNumber,
-                                                          streetDetails:
-                                                              defaultAddress
-                                                                  .streetDetails,
-                                                          zipcode:
-                                                              defaultAddress
-                                                                  .zipcode,
-                                                          state: defaultAddress
-                                                              .state,
-                                                          city: defaultAddress
-                                                              .city,
-                                                          isDefault:
-                                                              defaultAddress
-                                                                  .isDefault,
-                                                        ),
+                                            ),
+                                            ListTile(
+                                              title: Text(
+                                                  defaultAddress.name ?? ''),
+                                              subtitle: Text(
+                                                  '${defaultAddress.streetDetails}, ${defaultAddress.city}'),
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AddAddressView(
+                                                        id: defaultAddress.id,
+                                                        userFK: defaultAddress
+                                                            .userFK,
+                                                        title: defaultAddress
+                                                            .title,
+                                                        name:
+                                                            defaultAddress.name,
+                                                        phone: defaultAddress
+                                                            .phoneNumber,
+                                                        streetDetails:
+                                                            defaultAddress
+                                                                .streetDetails,
+                                                        zipcode: defaultAddress
+                                                            .zipcode,
+                                                        state: defaultAddress
+                                                            .state,
+                                                        city:
+                                                            defaultAddress.city,
+                                                        isDefault:
+                                                            defaultAddress
+                                                                .isDefault,
+                                                        edit: true,
                                                       ),
                                                     ),
-                                                    child: Row(
-                                                      spacing: 8,
-                                                      children: [
-                                                        const Icon(
-                                                          FontAwesome.pen_solid,
-                                                          size: 14,
+                                                  ).then(
+                                                    (_) => setState(() {}),
+                                                  ),
+                                                  child: Row(
+                                                    spacing: 8,
+                                                    children: [
+                                                      const Icon(
+                                                        FontAwesome.pen_solid,
+                                                        size: 14,
+                                                        color:
+                                                            Colors.blueAccent,
+                                                      ),
+                                                      Text(
+                                                        'Edit',
+                                                        style: BaseTextStyle
+                                                            .labelLarge(
                                                           color:
                                                               Colors.blueAccent,
                                                         ),
-                                                        Text(
-                                                          'Edit',
-                                                          style: BaseTextStyle
-                                                              .labelLarge(
-                                                            color: Colors
-                                                                .blueAccent,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  TextButton(
-                                                    onPressed: () async =>
-                                                        ProfileService()
-                                                            .removeAddress(
-                                                      defaultAddress,
-                                                    ),
-                                                    child: Row(
-                                                      spacing: 8,
-                                                      children: [
-                                                        const Icon(
-                                                          FontAwesome
-                                                              .trash_can_solid,
-                                                          size: 14,
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async =>
+                                                      ProfileService()
+                                                          .removeAddress(
+                                                            defaultAddress,
+                                                          )
+                                                          .then(
+                                                            (_) => setState(
+                                                              () {},
+                                                            ),
+                                                          ),
+                                                  child: Row(
+                                                    spacing: 8,
+                                                    children: [
+                                                      const Icon(
+                                                        FontAwesome
+                                                            .trash_can_solid,
+                                                        size: 14,
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                      Text(
+                                                        'Remove',
+                                                        style: BaseTextStyle
+                                                            .labelLarge(
                                                           color:
                                                               Colors.redAccent,
                                                         ),
-                                                        Text(
-                                                          'Remove',
-                                                          style: BaseTextStyle
-                                                              .labelLarge(
-                                                            color: Colors
-                                                                .redAccent,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      : Center(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(12),
+                                            child: Column(
+                                              spacing: 12,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  AppPaths.addressNotFound,
+                                                  height: 100,
+                                                ),
+                                                Text(
+                                                  'Default Address Not Found! Please Add Address.',
+                                                  style:
+                                                      BaseTextStyle.titleSmall(
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const AddAddressView(),
+                                                      ),
+                                                    ).then(
+                                                      (_) => setState(() {}),
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    side: const BorderSide(
+                                                      color: Colors.blue,
+                                                      width: 1.5,
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 22,
+                                                      vertical: 10,
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
-                                          )
-                                        : Center(
-                                            child: Container(
-                                              padding: const EdgeInsets.all(12),
-                                              child: Column(
-                                                spacing: 12,
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    AppPaths.addressNotFound,
-                                                    height: 100,
-                                                  ),
-                                                  Text(
-                                                    'Default Address Not Found! Please Add Address.',
-                                                    style: BaseTextStyle
-                                                        .titleSmall(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: () =>
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const AddAddressView(),
-                                                            )),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    spacing: 4,
+                                                    children: [
+                                                      const Icon(
+                                                        FontAwesome
+                                                            .location_dot_solid,
+                                                        size: 14,
+                                                        color:
+                                                            Colors.blueAccent,
                                                       ),
-                                                      side: const BorderSide(
-                                                        color: Colors.blue,
-                                                        width: 1.5,
-                                                      ),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        horizontal: 22,
-                                                        vertical: 10,
-                                                      ),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      spacing: 4,
-                                                      children: [
-                                                        const Icon(
-                                                          FontAwesome
-                                                              .location_dot_solid,
-                                                          size: 14,
+                                                      Text(
+                                                        'Add Address',
+                                                        style: BaseTextStyle
+                                                            .labelLarge(
                                                           color:
                                                               Colors.blueAccent,
                                                         ),
-                                                        Text(
-                                                          'Add Address',
-                                                          style: BaseTextStyle
-                                                              .labelLarge(
-                                                            color: Colors
-                                                                .blueAccent,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                          )),
+                                          ),
+                                        ),
+                                ),
                               ],
                             );
                         }

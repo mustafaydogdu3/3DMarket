@@ -17,3 +17,15 @@ Foreign Key FK
 
 projeye özgü widget'ları 'App' şeklinde
 core yapıları ise 'Base' şeklinde adlandırabiliriz.
+
+sen bir class oluşturduktan sonra onu kullanmak için class ismini yazıp constructor'ını çağırman yani parantez açıp kapaman gerekmekte 
+
+class oluşturma: class ProfileService {...}
+çağırma (instance oluşturma): ProfileService();
+
+
+Value Equality (Değer Eşitliği)
+her bir class'tan üretilen nesnenin (instance'ın) bir hashCode değeri vardır. Bu değer unique olduğu için compare işlemlerinde - karşılaştırma işlemlerinde nesnelerin her değeri birebir aynı olmasına rağmen aynı değildir. Equatable
+
+Expanded
+sadece layout widget'lar (Column, Row) içerisinde kullanılabilir. Kullanıldığı zaman widget'ın kaplayabildiği kadar alan kaplamasını sağlıyor

@@ -1,4 +1,6 @@
-class AddressModel {
+import 'package:equatable/equatable.dart';
+
+class AddressModel extends Equatable {
   AddressModel({
     this.id,
     this.userFK,
@@ -22,6 +24,19 @@ class AddressModel {
   String? state;
   String? city;
   bool isDefault = false;
+
+  factory AddressModel.empty() {
+    return AddressModel(
+      title: '',
+      name: '',
+      phoneNumber: '',
+      streetDetails: '',
+      zipcode: '',
+      state: '',
+      city: '',
+      isDefault: false,
+    );
+  }
 
   AddressModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -52,4 +67,16 @@ class AddressModel {
 
     return data;
   }
+
+  @override
+  List<Object?> get props => [
+        userFK,
+        title,
+        name,
+        phoneNumber,
+        streetDetails,
+        zipcode,
+        state,
+        city,
+      ];
 }

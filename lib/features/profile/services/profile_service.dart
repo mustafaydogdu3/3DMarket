@@ -86,6 +86,34 @@ class ProfileService {
     }
   }
 
+  Future<void> updateAddress(AddressModel address) async {
+    try {
+      final snap =
+          await FirebaseFirestore.instance.collection('addresses').get();
+
+      if (snap.docs.isNotEmpty) {
+        if (address.isDefault) {
+          for (var doc in snap.docs) {
+            await doc.reference.update({
+              'isDefault': false,
+            });
+          }
+        }
+      } else {
+        address.isDefault = true;
+      }
+
+      final editedAddressSnap = await FirebaseFirestore.instance
+          .collection('addresses')
+          .where('id', isEqualTo: address.id)
+          .get();
+
+      await editedAddressSnap.docs.first.reference.update(address.toJson());
+    } catch (e) {
+      throw Exception('Failed to get user profile: $e');
+    }
+  }
+
   Future<AddressModel> getDefaultAddress() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -126,5 +154,29 @@ class ProfileService {
         .get();
 
     await snap.docs.first.reference.delete();
+  }
+
+  Future<void> setAsDefault(AddressModel address) async {
+    final snap = await FirebaseFirestore.instance.collection('addresses').get();
+
+    if (snap.docs.isNotEmpty) {
+      for (var doc in snap.docs) {
+        await doc.reference.update({
+          'isDefault': false,
+        });
+      }
+    }
+
+    final addressSnap = await FirebaseFirestore.instance
+        .collection('addresses')
+        .where(
+          'id',
+          isEqualTo: address.id,
+        )
+        .get();
+
+    await addressSnap.docs.first.reference.update({
+      'isDefault': true,
+    });
   }
 }

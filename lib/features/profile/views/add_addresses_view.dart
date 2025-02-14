@@ -2,14 +2,19 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../product/validators/validator.dart';
+import '../../../product/values/colors/app_colors.dart';
 import '../../../product/values/localkeys/app_localkeys.dart';
+import '../../../product/values/paths/app_paths.dart';
 import '../../../product/widgets/buttons/primary_button_widget.dart';
 import '../models/address_model.dart';
 import '../services/profile_service.dart';
+import 'addresses_view.dart';
 
 class AddAddressView extends StatefulWidget {
   const AddAddressView({
     super.key,
+    this.id,
+    this.userFK,
     this.title,
     this.name,
     this.phone,
@@ -18,8 +23,11 @@ class AddAddressView extends StatefulWidget {
     this.state,
     this.city,
     this.isDefault,
+    this.edit = false,
   });
 
+  final String? id;
+  final String? userFK;
   final String? title;
   final String? name;
   final String? phone;
@@ -28,12 +36,27 @@ class AddAddressView extends StatefulWidget {
   final String? state;
   final String? city;
   final bool? isDefault;
+  final bool edit;
 
   @override
   State<AddAddressView> createState() => _AddAddressViewState();
 }
 
 class _AddAddressViewState extends State<AddAddressView> {
+  @override
+  void initState() {
+    super.initState();
+
+    titleController.text = widget.title ?? '';
+    nameController.text = widget.name ?? '';
+    phoneController.text = widget.phone ?? '';
+    streetController.text = widget.streetDetails ?? '';
+    zipcodeController.text = widget.zipcode ?? '';
+    stateController.text = widget.state ?? '';
+    cityController.text = widget.city ?? '';
+    isDefault = widget.isDefault ?? false;
+  }
+
   final TextEditingController titleController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -48,15 +71,6 @@ class _AddAddressViewState extends State<AddAddressView> {
 
   @override
   Widget build(BuildContext context) {
-    titleController.text = widget.title ?? '';
-    nameController.text = widget.name ?? '';
-    phoneController.text = widget.phone ?? '';
-    streetController.text = widget.streetDetails ?? '';
-    zipcodeController.text = widget.zipcode ?? '';
-    stateController.text = widget.state ?? '';
-    cityController.text = widget.city ?? '';
-    isDefault = widget.isDefault ?? false;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Address'),
@@ -112,6 +126,7 @@ class _AddAddressViewState extends State<AddAddressView> {
                 labelText: AppLocalkeys.cityDistrict,
               ),
               CheckboxListTile(
+                enabled: !(widget.isDefault ?? false),
                 value: isDefault,
                 onChanged: (value) {
                   setState(() {
@@ -132,6 +147,8 @@ class _AddAddressViewState extends State<AddAddressView> {
                     final city = cityController.text.trim();
 
                     final address = AddressModel(
+                      id: widget.id,
+                      userFK: widget.userFK,
                       title: title,
                       name: name,
                       phoneNumber: phone,
@@ -143,15 +160,68 @@ class _AddAddressViewState extends State<AddAddressView> {
                     );
 
                     try {
-                      await ProfileService().addAddress(address);
+                      if (widget.edit) {
+                        await ProfileService().updateAddress(address);
+                      } else {
+                        await ProfileService().addAddress(address);
+                      }
 
                       if (!context.mounted) return;
 
                       Navigator.pop(context);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Address saved successfully!')),
+                      showModalBottomSheet(
+                        context: AddressesView.scaffoldState.currentContext!,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(24),
+                          ),
+                        ),
+                        builder: (context) => Container(
+                          padding: const EdgeInsets.all(24),
+                          width: double.maxFinite,
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            runSpacing: 24,
+                            children: [
+                              Image.asset(AppPaths.check),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    widget.edit
+                                        ? 'Address updated\nsuccessfully!'
+                                        : 'Address added\nsuccessfully!',
+                                    textAlign: TextAlign.center,
+                                    style: BaseTextStyle.headlineSmall(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.background,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Done',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       );
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
