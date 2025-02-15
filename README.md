@@ -29,3 +29,13 @@ her bir class'tan üretilen nesnenin (instance'ın) bir hashCode değeri vardır
 
 Expanded
 sadece layout widget'lar (Column, Row) içerisinde kullanılabilir. Kullanıldığı zaman widget'ın kaplayabildiği kadar alan kaplamasını sağlıyor
+
+immutable mutable
+değişmez  değişen
+
+
+CRUD
+Create
+Read
+Update
+Delete

@@ -216,140 +216,158 @@ class _AddressesViewState extends State<AddressesView> {
                             'Other Addresses',
                             style: BaseTextStyle.titleMedium(),
                           ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: addresses?.length,
-                              itemBuilder: (context, index) {
-                                final address = addresses?[index];
+                          addresses != null && addresses.isEmpty
+                              ? const Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'No Have Any Other Addresses...',
+                                    ),
+                                  ),
+                                )
+                              : Expanded(
+                                  child: ListView.builder(
+                                    itemCount: addresses?.length,
+                                    itemBuilder: (context, index) {
+                                      final address = addresses?[index];
 
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                        left: 16,
-                                        top: 16,
-                                      ),
-                                      child: Text(
-                                        address?.title ?? '',
-                                        style: BaseTextStyle.bodyLarge(
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ),
-                                    ListTile(
-                                      title: Text(address?.name ?? ''),
-                                      subtitle: Text(
-                                          '${address?.streetDetails}, ${address?.city}'),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddAddressView(
-                                                id: address?.id,
-                                                userFK: address?.userFK,
-                                                title: address?.title,
-                                                name: address?.name,
-                                                phone: address?.phoneNumber,
-                                                streetDetails:
-                                                    address?.streetDetails,
-                                                zipcode: address?.zipcode,
-                                                state: address?.state,
-                                                city: address?.city,
-                                                isDefault: address?.isDefault,
-                                                edit: true,
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 16,
+                                              top: 16,
+                                            ),
+                                            child: Text(
+                                              address?.title ?? '',
+                                              style: BaseTextStyle.bodyLarge(
+                                                color: Colors.grey[700],
                                               ),
                                             ),
-                                          ).then(
-                                            (_) => setState(() {}),
                                           ),
-                                          child: Row(
-                                            spacing: 8,
+                                          ListTile(
+                                            title: Text(address?.name ?? ''),
+                                            subtitle: Text(
+                                                '${address?.streetDetails}, ${address?.city}'),
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const Icon(
-                                                FontAwesome.pen_solid,
-                                                size: 14,
-                                                color: Colors.blueAccent,
-                                              ),
-                                              Text(
-                                                'Edit',
-                                                style: BaseTextStyle.labelLarge(
-                                                  color: Colors.blueAccent,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: address != null
-                                              ? () async => ProfileService()
-                                                  .removeAddress(
-                                                    address,
-                                                  )
-                                                  .then(
-                                                    (_) => setState(
-                                                      () {},
+                                              TextButton(
+                                                onPressed: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AddAddressView(
+                                                      id: address?.id,
+                                                      userFK: address?.userFK,
+                                                      title: address?.title,
+                                                      name: address?.name,
+                                                      phone:
+                                                          address?.phoneNumber,
+                                                      streetDetails: address
+                                                          ?.streetDetails,
+                                                      zipcode: address?.zipcode,
+                                                      state: address?.state,
+                                                      city: address?.city,
+                                                      isDefault:
+                                                          address?.isDefault,
+                                                      edit: true,
                                                     ),
-                                                  )
-                                              : null,
-                                          child: Row(
-                                            spacing: 8,
-                                            children: [
-                                              const Icon(
-                                                FontAwesome.trash_can_solid,
-                                                size: 14,
-                                                color: Colors.redAccent,
-                                              ),
-                                              Text(
-                                                'Remove',
-                                                style: BaseTextStyle.labelLarge(
-                                                  color: Colors.redAccent,
+                                                  ),
+                                                ).then(
+                                                  (_) => setState(() {}),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: address != null
-                                              ? () async => ProfileService()
-                                                  .setAsDefault(
-                                                    address,
-                                                  )
-                                                  .then(
-                                                    (_) => setState(
-                                                      () {},
+                                                child: Row(
+                                                  spacing: 8,
+                                                  children: [
+                                                    const Icon(
+                                                      FontAwesome.pen_solid,
+                                                      size: 14,
+                                                      color: Colors.blueAccent,
                                                     ),
-                                                  )
-                                              : null,
-                                          child: Row(
-                                            spacing: 8,
-                                            children: [
-                                              const Icon(
-                                                FontAwesome.map_pin_solid,
-                                                size: 14,
-                                                color: Colors.lightBlue,
+                                                    Text(
+                                                      'Edit',
+                                                      style: BaseTextStyle
+                                                          .labelLarge(
+                                                        color:
+                                                            Colors.blueAccent,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              Text(
-                                                'Set As Default',
-                                                style: BaseTextStyle.labelLarge(
-                                                  color: Colors.lightBlue,
+                                              TextButton(
+                                                onPressed: address != null
+                                                    ? () async =>
+                                                        ProfileService()
+                                                            .removeAddress(
+                                                              address,
+                                                            )
+                                                            .then(
+                                                              (_) => setState(
+                                                                () {},
+                                                              ),
+                                                            )
+                                                    : null,
+                                                child: Row(
+                                                  spacing: 8,
+                                                  children: [
+                                                    const Icon(
+                                                      FontAwesome
+                                                          .trash_can_solid,
+                                                      size: 14,
+                                                      color: Colors.redAccent,
+                                                    ),
+                                                    Text(
+                                                      'Remove',
+                                                      style: BaseTextStyle
+                                                          .labelLarge(
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: address != null
+                                                    ? () async =>
+                                                        ProfileService()
+                                                            .setAsDefaultAddress(
+                                                              address,
+                                                            )
+                                                            .then(
+                                                              (_) => setState(
+                                                                () {},
+                                                              ),
+                                                            )
+                                                    : null,
+                                                child: Row(
+                                                  spacing: 8,
+                                                  children: [
+                                                    const Icon(
+                                                      FontAwesome.map_pin_solid,
+                                                      size: 14,
+                                                      color: Colors.lightBlue,
+                                                    ),
+                                                    Text(
+                                                      'Set As Default',
+                                                      style: BaseTextStyle
+                                                          .labelLarge(
+                                                        color: Colors.lightBlue,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
                         ],
                       ),
                     ),

@@ -1,9 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class AddressModel extends Equatable {
-  AddressModel({
-    this.id,
-    this.userFK,
+  const AddressModel({
+    required this.id,
+    required this.userFK,
     required this.title,
     required this.name,
     required this.phoneNumber,
@@ -14,19 +17,21 @@ class AddressModel extends Equatable {
     required this.isDefault,
   });
 
-  String? id;
-  String? userFK;
-  String? title;
-  String? name;
-  String? phoneNumber;
-  String? streetDetails;
-  String? zipcode;
-  String? state;
-  String? city;
-  bool isDefault = false;
+  final String? id;
+  final String? userFK;
+  final String? title;
+  final String? name;
+  final String? phoneNumber;
+  final String? streetDetails;
+  final String? zipcode;
+  final String? state;
+  final String? city;
+  final bool isDefault;
 
   factory AddressModel.empty() {
-    return AddressModel(
+    return const AddressModel(
+      id: '',
+      userFK: '',
       title: '',
       name: '',
       phoneNumber: '',
@@ -38,17 +43,19 @@ class AddressModel extends Equatable {
     );
   }
 
-  AddressModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userFK = json['userFK'];
-    title = json['title'];
-    name = json['name'];
-    phoneNumber = json['phoneNumber'];
-    streetDetails = json['streetDetails'];
-    zipcode = json['zipcode'];
-    state = json['state'];
-    city = json['city'];
-    isDefault = json['isDefault'];
+  factory AddressModel.fromJson(Map<String, dynamic> json) {
+    return AddressModel(
+      id: json['id'],
+      userFK: json['userFK'],
+      title: json['title'],
+      name: json['name'],
+      phoneNumber: json['phoneNumber'],
+      streetDetails: json['streetDetails'],
+      zipcode: json['zipcode'],
+      state: json['state'],
+      city: json['city'],
+      isDefault: json['isDefault'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +73,32 @@ class AddressModel extends Equatable {
     data['isDefault'] = isDefault;
 
     return data;
+  }
+
+  AddressModel copyWith({
+    String? id,
+    String? userFK,
+    String? title,
+    String? name,
+    String? phoneNumber,
+    String? streetDetails,
+    String? zipcode,
+    String? state,
+    String? city,
+    bool? isDefault,
+  }) {
+    return AddressModel(
+      id: id ?? this.id,
+      userFK: userFK ?? this.userFK,
+      title: title ?? this.title,
+      name: name ?? this.name,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      streetDetails: streetDetails ?? this.streetDetails,
+      zipcode: zipcode ?? this.zipcode,
+      state: state ?? this.state,
+      city: city ?? this.city,
+      isDefault: isDefault ?? this.isDefault,
+    );
   }
 
   @override

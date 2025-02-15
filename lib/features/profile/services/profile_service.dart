@@ -58,6 +58,8 @@ class ProfileService {
 
   Future<void> addAddress(AddressModel address) async {
     try {
+      AddressModel updatedAddress = AddressModel.empty();
+
       final snap =
           await FirebaseFirestore.instance.collection('addresses').get();
 
@@ -70,17 +72,19 @@ class ProfileService {
           }
         }
       } else {
-        address.isDefault = true;
+        updatedAddress = address.copyWith(isDefault: true);
       }
 
       final userId = FirebaseAuth.instance.currentUser?.uid;
 
-      address.id = const Uuid().v4();
-      address.userFK = userId;
+      updatedAddress = updatedAddress.copyWith(
+        id: const Uuid().v4(),
+        userFK: userId,
+      );
 
       await FirebaseFirestore.instance
           .collection('addresses')
-          .add(address.toJson());
+          .add(updatedAddress.toJson());
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
     }
@@ -88,6 +92,8 @@ class ProfileService {
 
   Future<void> updateAddress(AddressModel address) async {
     try {
+      AddressModel updatedAddress = AddressModel.empty();
+
       final snap =
           await FirebaseFirestore.instance.collection('addresses').get();
 
@@ -100,7 +106,7 @@ class ProfileService {
           }
         }
       } else {
-        address.isDefault = true;
+        updatedAddress = address.copyWith(isDefault: true);
       }
 
       final editedAddressSnap = await FirebaseFirestore.instance
@@ -108,7 +114,8 @@ class ProfileService {
           .where('id', isEqualTo: address.id)
           .get();
 
-      await editedAddressSnap.docs.first.reference.update(address.toJson());
+      await editedAddressSnap.docs.first.reference
+          .update(updatedAddress.toJson());
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
     }
@@ -156,7 +163,7 @@ class ProfileService {
     await snap.docs.first.reference.delete();
   }
 
-  Future<void> setAsDefault(AddressModel address) async {
+  Future<void> setAsDefaultAddress(AddressModel address) async {
     final snap = await FirebaseFirestore.instance.collection('addresses').get();
 
     if (snap.docs.isNotEmpty) {
