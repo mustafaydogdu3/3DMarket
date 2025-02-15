@@ -19,12 +19,6 @@ class MyProfileView extends StatefulWidget {
 }
 
 class _MyProfileViewState extends State<MyProfileView> {
-  String name = '';
-  String email = '';
-  String phone = '';
-  String address = '';
-  String gender = '';
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -50,11 +44,7 @@ class _MyProfileViewState extends State<MyProfileView> {
 
           case ConnectionState.active:
           case ConnectionState.done:
-            email = snap.data?.email ?? '';
-            name = snap.data?.name ?? '';
-            phone = snap.data?.phoneNumber ?? '';
-            address = snap.data?.address ?? '';
-            gender = snap.data?.gender ?? '';
+            final user = snap.data;
 
             return Scaffold(
               appBar: AppBar(
@@ -65,11 +55,10 @@ class _MyProfileViewState extends State<MyProfileView> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => EditProfileView(
-                          address: address,
-                          email: email,
-                          gender: gender,
-                          name: name,
-                          phone: phone,
+                          email: user?.email ?? '',
+                          gender: user?.gender ?? '',
+                          name: user?.name ?? '',
+                          phone: user?.phoneNumber ?? '',
                         ),
                       ),
                     ).then(
@@ -121,14 +110,29 @@ class _MyProfileViewState extends State<MyProfileView> {
                     Center(
                       child: CircleAvatar(
                         radius: 50,
-                        child: Image.asset('assets/images/png/profil.png'),
+                        child: ClipOval(
+                          child: user?.photoUrl != null
+                              ? Image.network(user!.photoUrl!)
+                              : Image.asset('assets/images/png/profil.png'),
+                        ),
                       ),
                     ),
-                    ProfileFieldsWidget(title: 'Name:', name: name),
-                    ProfileFieldsWidget(title: 'Email:', name: email),
-                    ProfileFieldsWidget(title: 'Phone:', name: phone),
-                    ProfileFieldsWidget(title: 'Address:', name: address),
-                    ProfileFieldsWidget(title: 'Gender:', name: gender),
+                    ProfileFieldsWidget(
+                      title: 'Name:',
+                      name: user?.name ?? '',
+                    ),
+                    ProfileFieldsWidget(
+                      title: 'Email:',
+                      name: user?.email ?? '',
+                    ),
+                    ProfileFieldsWidget(
+                      title: 'Phone:',
+                      name: user?.phoneNumber ?? '',
+                    ),
+                    ProfileFieldsWidget(
+                      title: 'Gender:',
+                      name: user?.gender ?? '',
+                    ),
                     FutureBuilder(
                       future: ProfileService().getDefaultAddress(),
                       builder: (context, snap) {

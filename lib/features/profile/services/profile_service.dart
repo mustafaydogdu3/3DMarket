@@ -10,7 +10,6 @@ class ProfileService {
     required String name,
     required String email,
     required String phoneNumber,
-    required String address,
     required String? gender,
   }) async {
     try {
@@ -26,7 +25,6 @@ class ProfileService {
         'name': name,
         'email': email,
         'phoneNumber': phoneNumber,
-        'address': address,
         'gender': gender,
       });
     } catch (e) {

@@ -1,4 +1,5 @@
 import 'package:core/base/text/style/base_text_style.dart';
+import 'package:core/widgets/snackbar/base_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -6,6 +7,8 @@ import 'package:icons_plus/icons_plus.dart';
 import '../../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../../product/values/paths/app_paths.dart';
 import '../../../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../../home/view/home_view.dart';
+import '../../../services/auth_service.dart';
 import '../../login/modals/login_with_email_modal.dart';
 import '../../register/modals/register_with_email_modal.dart';
 
@@ -52,7 +55,44 @@ class AuthHomeView extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 12),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => const PopScope(
+                                    canPop: false,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                );
+
+                                final error =
+                                    await AuthService().loginWithGoogle();
+
+                                if (!context.mounted) return;
+
+                                Navigator.pop(context);
+
+                                if (error == null) {
+                                  Navigator.popUntil(
+                                      context, (route) => route.isFirst);
+
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const HomeView(),
+                                    ),
+                                  );
+                                } else {
+                                  BaseSnackbarWidget.showOverlaySnackBar(
+                                    context: context,
+                                    message: error,
+                                    backgroundColor: Colors.red,
+                                    style: BaseTextStyle.labelLarge(),
+                                  );
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),

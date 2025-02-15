@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   bool authCheck() {
@@ -64,6 +65,45 @@ class AuthService {
     }
   }
 
+  Future<String?> loginWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final firebaseUser = userCredential.user;
+
+      final snap = await FirebaseFirestore.instance
+          .collection('users')
+          .where('id', isEqualTo: firebaseUser?.uid)
+          .get();
+
+      if (snap.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('users').add(
+          {
+            'id': userCredential.user?.uid,
+            'email': googleUser?.email,
+            'name': googleUser?.displayName,
+            'photoUrl': googleUser?.photoUrl,
+          },
+        );
+      }
+
+      return null;
+    } catch (e) {
+      return 'Unexpected error occurred!';
+    }
+  }
+
   Future<String?> sendPasswordResetEmail(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
@@ -78,6 +118,8 @@ class AuthService {
   Future<void> logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-    } catch (e) {}
+    } catch (e) {
+      throw Exception('An unexpected error occurred');
+    }
   }
 }

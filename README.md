@@ -33,9 +33,11 @@ sadece layout widget'lar (Column, Row) içerisinde kullanılabilir. Kullanıldı
 immutable mutable
 değişmez  değişen
 
-
 CRUD
 Create
 Read
 Update
 Delete
+
+SHA1 Key
+SHA256 Key

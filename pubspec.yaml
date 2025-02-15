@@ -22,6 +22,7 @@ dependencies:
   firebase_auth: ^5.3.4
   cloud_firestore: ^5.6.1
   firebase_storage: ^12.4.0
+  google_sign_in: ^6.2.2
 
   # Utils
   flutter_svg: ^2.0.16

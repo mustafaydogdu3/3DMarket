@@ -12,14 +12,12 @@ class EditProfileView extends StatefulWidget {
     required this.name,
     required this.email,
     required this.phone,
-    required this.address,
     required this.gender,
   });
 
   final String name;
   final String email;
   final String phone;
-  final String address;
   final String gender;
 
   @override
@@ -34,14 +32,12 @@ class _EditProfileViewState extends State<EditProfileView> {
     nameController.text = widget.name;
     emailController.text = widget.email;
     phoneController.text = widget.phone;
-    addressController.text = widget.address;
     gender = widget.gender;
   }
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
   String? gender;
 
   @override
@@ -124,20 +120,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                 labelText: AppLocalkeys.mobileNumber,
               ),
             ),
-            TextFormField(
-              keyboardType: TextInputType.streetAddress,
-              controller: addressController,
-              maxLines: 2,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-                labelStyle: BaseTextStyle.bodyMedium(),
-                labelText: AppLocalkeys.location,
-              ),
-            ),
             Text(
               "Gender",
               style: BaseTextStyle.labelLarge(),
@@ -155,12 +137,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                 final name = nameController.text.trim();
                 final email = emailController.text.trim();
                 final phoneNumber = phoneController.text.trim();
-                final address = addressController.text.trim();
 
-                if (name.isEmpty ||
-                    email.isEmpty ||
-                    phoneNumber.isEmpty ||
-                    address.isEmpty) {
+                if (name.isEmpty || email.isEmpty || phoneNumber.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                         content: Text('Please fill all the fields.')),
@@ -173,11 +151,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     name: name,
                     email: email,
                     phoneNumber: phoneNumber,
-                    address: address,
                     gender: gender,
                   );
 
-                  if (!mounted) return;
+                  if (!context.mounted) return;
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

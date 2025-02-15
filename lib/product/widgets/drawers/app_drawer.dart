@@ -35,13 +35,20 @@ class AppDrawer extends StatelessWidget {
                       case ConnectionState.waiting:
                       case ConnectionState.active:
                       case ConnectionState.done:
+                        final user = snap.data;
+
                         return Row(
                           spacing: 16,
                           children: [
                             CircleAvatar(
                               radius: 40,
-                              child:
-                                  Image.asset('assets/images/png/profil.png'),
+                              child: ClipOval(
+                                child: user?.photoUrl != null
+                                    ? Image.network(user!.photoUrl!)
+                                    : Image.asset(
+                                        'assets/images/png/profil.png',
+                                      ),
+                              ),
                             ),
                             Column(
                               spacing: 8,
