@@ -62,7 +62,7 @@ class _AddressesViewState extends State<AddressesView> {
         ],
       ),
       body: FutureBuilder(
-        future: ProfileService().getAddresses(),
+        future: ProfileService.instance.getAddresses(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -158,15 +158,16 @@ class _AddressesViewState extends State<AddressesView> {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () async => ProfileService()
-                                        .removeAddress(
-                                          defaultAddress,
-                                        )
-                                        .then(
-                                          (_) => setState(
-                                            () {},
-                                          ),
-                                        ),
+                                    onPressed: () async =>
+                                        ProfileService.instance
+                                            .removeAddress(
+                                              defaultAddress,
+                                            )
+                                            .then(
+                                              (_) => setState(
+                                                () {},
+                                              ),
+                                            ),
                                     child: Row(
                                       spacing: 8,
                                       children: [
@@ -301,7 +302,7 @@ class _AddressesViewState extends State<AddressesView> {
                                               TextButton(
                                                 onPressed: address != null
                                                     ? () async =>
-                                                        ProfileService()
+                                                        ProfileService.instance
                                                             .removeAddress(
                                                               address,
                                                             )
@@ -332,16 +333,16 @@ class _AddressesViewState extends State<AddressesView> {
                                               ),
                                               TextButton(
                                                 onPressed: address != null
-                                                    ? () async =>
-                                                        ProfileService()
-                                                            .setAsDefaultAddress(
-                                                              address,
-                                                            )
-                                                            .then(
-                                                              (_) => setState(
-                                                                () {},
-                                                              ),
-                                                            )
+                                                    ? () async => ProfileService
+                                                        .instance
+                                                        .setAsDefaultAddress(
+                                                          address,
+                                                        )
+                                                        .then(
+                                                          (_) => setState(
+                                                            () {},
+                                                          ),
+                                                        )
                                                     : null,
                                                 child: Row(
                                                   spacing: 8,

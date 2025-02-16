@@ -28,7 +28,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               child: FutureBuilder(
-                  future: ProfileService().getUserProfile(),
+                  future: ProfileService.instance.getUserProfile(),
                   builder: (context, snap) {
                     switch (snap.connectionState) {
                       case ConnectionState.none:
@@ -85,7 +85,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
             onTap: () {
-              AuthService().logout();
+              AuthService.instance.logout();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

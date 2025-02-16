@@ -13,7 +13,7 @@ class RegisterWithEmailModal extends StatelessWidget {
     super.key,
   });
 
-  static final AuthService _authService = AuthService();
+  static final AuthService _authService = AuthService.instance;
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

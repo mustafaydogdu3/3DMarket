@@ -20,7 +20,7 @@ class LoginWithEmailModal extends StatefulWidget {
 }
 
 class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
-  final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService.instance;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

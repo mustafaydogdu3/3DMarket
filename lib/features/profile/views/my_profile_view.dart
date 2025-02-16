@@ -22,7 +22,7 @@ class _MyProfileViewState extends State<MyProfileView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ProfileService().getUserProfile(),
+      future: ProfileService.instance.getUserProfile(),
       builder: (context, snap) {
         switch (snap.connectionState) {
           case ConnectionState.none:
@@ -134,7 +134,7 @@ class _MyProfileViewState extends State<MyProfileView> {
                       name: user?.gender ?? '',
                     ),
                     FutureBuilder(
-                      future: ProfileService().getDefaultAddress(),
+                      future: ProfileService.instance.getDefaultAddress(),
                       builder: (context, snap) {
                         switch (snap.connectionState) {
                           case ConnectionState.none:
@@ -285,7 +285,7 @@ class _MyProfileViewState extends State<MyProfileView> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () async =>
-                                                      ProfileService()
+                                                      ProfileService.instance
                                                           .removeAddress(
                                                             defaultAddress,
                                                           )

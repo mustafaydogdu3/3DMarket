@@ -67,8 +67,8 @@ class AuthHomeView extends StatelessWidget {
                                   ),
                                 );
 
-                                final error =
-                                    await AuthService().loginWithGoogle();
+                                final error = await AuthService.instance
+                                    .loginWithGoogle();
 
                                 if (!context.mounted) return;
 

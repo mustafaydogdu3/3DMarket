@@ -161,9 +161,9 @@ class _AddAddressViewState extends State<AddAddressView> {
 
                     try {
                       if (widget.edit) {
-                        await ProfileService().updateAddress(address);
+                        await ProfileService.instance.updateAddress(address);
                       } else {
-                        await ProfileService().addAddress(address);
+                        await ProfileService.instance.addAddress(address);
                       }
 
                       if (!context.mounted) return;

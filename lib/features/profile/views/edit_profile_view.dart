@@ -146,8 +146,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   return;
                 }
                 try {
-                  final profileService = ProfileService();
-                  await profileService.saveUserProfile(
+                  await ProfileService.instance.saveUserProfile(
                     name: name,
                     email: email,
                     phoneNumber: phoneNumber,

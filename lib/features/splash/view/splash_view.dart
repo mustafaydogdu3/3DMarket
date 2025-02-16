@@ -20,7 +20,7 @@ class _SplashViewState extends State<SplashView> {
 
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        final authStatus = AuthService().authCheck();
+        final authStatus = AuthService.instance.authCheck();
 
         if (authStatus) {
           Navigator.pushReplacement(
