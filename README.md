@@ -41,3 +41,6 @@ Delete
 
 SHA1 Key
 SHA256 Key
+
+Record Type
+Either Type dartz kütüphanesi

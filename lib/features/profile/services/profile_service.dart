@@ -6,9 +6,9 @@ import '../../auth/models/user/user_model.dart';
 import '../models/address_model.dart';
 
 class ProfileService {
-  ProfileService._();
+  const ProfileService._();
 
-  static final ProfileService instance = ProfileService._();
+  static ProfileService get instance => const ProfileService._();
 
   Future<void> saveUserProfile({
     required String name,

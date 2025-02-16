@@ -1,0 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../models/category_model.dart';
+
+class HomeServices {
+  const HomeServices._();
+
+  static HomeServices get instance => const HomeServices._();
+
+  void getProducts() {}
+
+  Future<(String?, List<CategoryModel>?)> getMainCategories() async {
+    try {
+      final categoriesSnap =
+          await FirebaseFirestore.instance.collection('categories').get();
+
+      List<CategoryModel> categories = [];
+
+      for (var categoryDoc in categoriesSnap.docs) {
+        final category = CategoryModel.fromJson(categoryDoc.data());
+
+        categories.add(category);
+      }
+
+      return (null, categories);
+    } catch (e) {
+      return ('Failed to load categories!', null);
+    }
+  }
+
+  Future<(String?, List<CategoryModel>?)> getSubCategories(
+    String categoryFK,
+  ) async {
+    try {
+      final subCategoriesSnap = await FirebaseFirestore.instance
+          .collection('sub_categories')
+          .where('categoryFK', isEqualTo: categoryFK)
+          .get();
+
+      List<CategoryModel> subCategories = [];
+
+      for (var categoryDoc in subCategoriesSnap.docs) {
+        final subCategory = CategoryModel.fromJson(categoryDoc.data());
+
+        subCategories.add(subCategory);
+      }
+
+      return (null, subCategories);
+    } catch (e) {
+      return ('Failed to load sub categories!', null);
+    }
+  }
+}
