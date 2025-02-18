@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/category_model.dart';
 
-class HomeServices {
-  const HomeServices._();
+class HomeService {
+  const HomeService._();
 
-  static HomeServices get instance => const HomeServices._();
+  static HomeService get instance => const HomeService._();
 
   void getProducts() {}
 
