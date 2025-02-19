@@ -4,7 +4,7 @@ import '../../../product/values/colors/app_colors.dart';
 import '../../../product/values/paths/app_paths.dart';
 import '../../auth/services/auth_service.dart';
 import '../../auth/views/home/view/auth_home_view.dart';
-import '../../home/view/home_view.dart';
+import '../../home/view/home_nav_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -26,7 +26,7 @@ class _SplashViewState extends State<SplashView> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomeView(),
+              builder: (context) => const HomeNavView(),
             ),
           );
         } else {

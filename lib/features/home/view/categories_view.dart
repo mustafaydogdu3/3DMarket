@@ -1,8 +1,6 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 
-import '../../../product/widgets/drawers/app_drawer.dart';
 import '../models/category_model.dart';
 import '../services/home_service.dart';
 import 'home_view.dart';
@@ -24,62 +22,84 @@ class _CategoriesViewState extends State<CategoriesView> {
   void initState() {
     super.initState();
 
-    selectedCategory = widget.categories.first;
+    selectedCategories = widget.categories;
+    selectedCategory = selectedCategories!.first;
+
+    // Initialize the animated list key
+    _listKey = GlobalKey<AnimatedListState>();
   }
 
   late CategoryModel selectedCategory;
-  CategoryModel? selectedSubCategory;
-  CategoryModel? selectedTopCategory;
-  List<CategoryModel>? selectedSubCategories;
+  List<CategoryModel>? selectedCategories;
+  List<List<CategoryModel>> topCategories = [];
+
+  // Key for AnimatedList
+  GlobalKey<AnimatedListState>? _listKey;
+
+  // Update categories with animation
+  void _updateSelectedCategories(List<CategoryModel> newCategories) {
+    // If there are existing categories, remove them with animation
+    if (selectedCategories != null && selectedCategories!.isNotEmpty) {
+      final oldLength = selectedCategories!.length;
+
+      // Remove items with animation
+      for (int i = oldLength - 1; i >= 0; i--) {
+        final item = selectedCategories![i];
+        _listKey!.currentState?.removeItem(
+          i,
+          (context, animation) => _buildAnimatedItem(item, animation, false),
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+
+      // Schedule adding new items after removal animation completes
+      Future.delayed(const Duration(milliseconds: 300), () {
+        setState(() {
+          selectedCategories = newCategories;
+          selectedCategory = newCategories.first;
+
+          // Reset the key to create a fresh AnimatedList
+          _listKey = GlobalKey<AnimatedListState>();
+        });
+      });
+    } else {
+      setState(() {
+        selectedCategories = newCategories;
+        selectedCategory = newCategories.first;
+      });
+    }
+  }
+
+  // Build animated item for insertion/removal
+  Widget _buildAnimatedItem(
+      CategoryModel category, Animation<double> animation, bool isSelected) {
+    // Slide transition for the item
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(-1.0, 0.0),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOut,
+      )),
+      child: FadeTransition(
+        opacity: animation,
+        child: ImageTextButtonWidget(
+          onPressed: () => setState(() {
+            selectedCategory = category;
+          }),
+          category: category,
+          isSelected: category == selectedCategory,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const AppDrawer(),
-      appBar: AppBar(
-        title: Text(
-          'Categories',
-          style: BaseTextStyle.titleLarge(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              OctIcons.bell,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Transform.scale(
-              scale: 0.9,
-              alignment: Alignment.topCenter,
-              child: const Icon(
-                FontAwesome.bag_shopping_solid,
-                size: 28,
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesome.house_solid,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.grid_view_outlined,
-            ),
-            label: 'Categories',
-          ),
-        ],
-      ),
-      body: Row(
+    return Container(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
         children: [
           const SizedBox(
             width: 8,
@@ -88,38 +108,28 @@ class _CategoriesViewState extends State<CategoriesView> {
             flex: 3,
             child: Column(
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.chevron_left),
-                ),
+                topCategories.isNotEmpty
+                    ? IconButton(
+                        onPressed: () {
+                          _updateSelectedCategories(topCategories.last);
+                          topCategories.removeLast();
+                        },
+                        icon: const Icon(Icons.chevron_left),
+                      )
+                    : const SizedBox.shrink(),
                 Expanded(
-                  child: selectedSubCategory != null
-                      ? ListView.builder(
-                          itemCount: selectedSubCategories?.length,
-                          itemBuilder: (context, index) {
-                            final subCategory = selectedSubCategories?[index];
-
-                            return ImageTextButtonWidget(
-                              onPressed: () {},
-                              category: subCategory,
-                              isSelected: subCategory == selectedCategory,
-                            );
-                          },
-                        )
-                      : ListView.builder(
-                          itemCount: widget.categories.length,
-                          itemBuilder: (context, index) {
-                            final category = widget.categories[index];
-
-                            return ImageTextButtonWidget(
-                              onPressed: () => setState(() {
-                                selectedCategory = category;
-                              }),
-                              category: category,
-                              isSelected: category == selectedCategory,
-                            );
-                          },
-                        ),
+                  child: AnimatedList(
+                    key: _listKey,
+                    initialItemCount: selectedCategories?.length ?? 0,
+                    itemBuilder: (context, index, animation) {
+                      final category = selectedCategories?[index];
+                      return _buildAnimatedItem(
+                        category!,
+                        animation,
+                        category == selectedCategory,
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -129,9 +139,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             flex: 7,
             child: FutureBuilder(
               future: HomeService.instance.getSubCategories(
-                selectedSubCategory != null
-                    ? selectedSubCategory?.id ?? ''
-                    : selectedCategory.id ?? '',
+                selectedCategory.id!,
               ),
               builder: (context, snap) {
                 switch (snap.connectionState) {
@@ -156,47 +164,90 @@ class _CategoriesViewState extends State<CategoriesView> {
                     } else {
                       final subCategories = failureOrSubCategories?.$2;
 
-                      selectedSubCategories = subCategories;
-
-                      return GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                        itemCount: subCategories?.length,
-                        itemBuilder: (context, index) {
-                          final subCategory = subCategories?[index];
-
-                          return Card(
-                            child: RawMaterialButton(
-                              onPressed: () => setState(() {
-                                selectedTopCategory = selectedCategory;
-
-                                selectedSubCategory = subCategory;
-                              }),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  spacing: 4,
-                                  children: [
-                                    Expanded(
-                                      child: Image.network(
-                                        subCategory?.imageUrl ?? '',
-                                      ),
-                                    ),
-                                    Text(
-                                      subCategory?.name ?? '',
-                                      style: BaseTextStyle.titleSmall(),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        transitionBuilder: (Widget child,
+                            Animation<double> switcherAnimation) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(1.0, 0.0), // Sağdan
+                              end: Offset.zero,
+                            ).animate(CurvedAnimation(
+                              parent: switcherAnimation,
+                              curve: Curves.easeOut,
+                            )),
+                            child: FadeTransition(
+                              opacity: switcherAnimation,
+                              child: child,
                             ),
                           );
                         },
+                        child: GridView.builder(
+                          key: ValueKey<String>(selectedCategory.id ?? ''),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          itemCount: subCategories?.length,
+                          itemBuilder: (context, index) {
+                            final subCategory = subCategories?[index];
+
+                            return TweenAnimationBuilder<double>(
+                              tween: Tween<double>(begin: 0.0, end: 1.0),
+                              duration: Duration(
+                                  milliseconds: 500 +
+                                      (index *
+                                          100)), // Her kart için farklı süre
+                              curve: Curves.easeOutCubic,
+                              builder: (context, value, child) {
+                                // Sırayla animasyon etkisi
+                                final delay = index * 0.1;
+                                final adjustedValue = delay >= value
+                                    ? 0.0
+                                    : (value - delay) / (1.0 - delay);
+                                final clampedValue =
+                                    adjustedValue.clamp(0.0, 1.0);
+
+                                return Transform.translate(
+                                  offset: Offset((1.0 - clampedValue) * 100,
+                                      0), // Sağdan sola kaydırma
+                                  child: Opacity(
+                                    opacity: clampedValue,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    topCategories.add(selectedCategories!);
+                                    _updateSelectedCategories(subCategories!);
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Column(
+                                      spacing: 4,
+                                      children: [
+                                        Expanded(
+                                          child: Image.network(
+                                            subCategory?.imageUrl ?? '',
+                                          ),
+                                        ),
+                                        Text(
+                                          subCategory?.name ?? '',
+                                          style: BaseTextStyle.titleSmall(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
                     }
                 }

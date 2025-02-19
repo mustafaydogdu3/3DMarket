@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 import '../../../product/values/colors/app_colors.dart';
-import '../../../product/widgets/drawers/app_drawer.dart';
 import '../models/category_model.dart';
 import '../services/home_service.dart';
-import 'categories_view.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({
+    super.key,
+    this.onViewAllPressed,
+  });
+
+  // View All butonuna basıldığında çağrılacak fonksiyon
+  final VoidCallback? onViewAllPressed;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -18,150 +22,113 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const AppDrawer(),
-      appBar: AppBar(
-        title: Text(
-          'Home',
-          style: BaseTextStyle.titleLarge(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(OctIcons.bell)),
-          IconButton(onPressed: () {}, icon: const Icon(OctIcons.bell))
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesome.house_solid,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.grid_view_outlined,
-            ),
-            label: 'Categories',
-          ),
-        ],
-      ),
-      body: FutureBuilder(
-        future: HomeService.instance.getMainCategories(),
-        builder: (context, snap) {
-          switch (snap.connectionState) {
-            case ConnectionState.none:
-              return const SizedBox();
+    return FutureBuilder(
+      future: HomeService.instance.getMainCategories(),
+      builder: (context, snap) {
+        switch (snap.connectionState) {
+          case ConnectionState.none:
+            return const SizedBox();
 
-            case ConnectionState.waiting:
-              return const PopScope(
-                canPop: false,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+          case ConnectionState.waiting:
+            return const PopScope(
+              canPop: false,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+
+          case ConnectionState.active:
+          case ConnectionState.done:
+            final failureOrCategories = snap.data;
+
+            if (failureOrCategories?.$1 != null) {
+              final failure = failureOrCategories?.$1;
+
+              return Card(
+                child: Text(failure ?? ''),
               );
+            } else {
+              final categories = failureOrCategories?.$2;
 
-            case ConnectionState.active:
-            case ConnectionState.done:
-              final failureOrCategories = snap.data;
-
-              if (failureOrCategories?.$1 != null) {
-                final failure = failureOrCategories?.$1;
-
-                return Card(
-                  child: Text(failure ?? ''),
-                );
-              } else {
-                final categories = failureOrCategories?.$2;
-
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      SearchBar(
-                        leading: const Icon(
-                          BoxIcons.bx_search,
-                          color: Colors.black,
-                        ),
-                        backgroundColor: const WidgetStatePropertyAll(
-                          Colors.transparent,
-                        ),
-                        shadowColor: const WidgetStatePropertyAll(
-                          Colors.transparent,
-                        ),
-                        shape: WidgetStatePropertyAll(
-                          RoundedRectangleBorder(
-                            side: const BorderSide(
-                              color: Colors.grey,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
+              return Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    SearchBar(
+                      leading: const Icon(
+                        BoxIcons.bx_search,
+                        color: Colors.black,
+                      ),
+                      backgroundColor: const WidgetStatePropertyAll(
+                        Colors.transparent,
+                      ),
+                      shadowColor: const WidgetStatePropertyAll(
+                        Colors.transparent,
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          side: const BorderSide(
+                            color: Colors.grey,
                           ),
-                        ),
-                        hintText: 'Search Anything...',
-                        hintStyle: WidgetStatePropertyAll(
-                          BaseTextStyle.bodyLarge(
-                            color: Colors.black87,
-                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Categories',
-                            style: BaseTextStyle.titleMedium(),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoriesView(
-                                  categories: categories ?? [],
+                      hintText: 'Search Anything...',
+                      hintStyle: WidgetStatePropertyAll(
+                        BaseTextStyle.bodyLarge(
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Categories',
+                          style: BaseTextStyle.titleMedium(),
+                        ),
+                        TextButton(
+                          // View All butonuna basıldığında onViewAllPressed callback'ini çağır
+                          onPressed: widget.onViewAllPressed,
+                          child: Row(
+                            children: [
+                              Text(
+                                'View All',
+                                style: BaseTextStyle.labelLarge(
+                                  color: Colors.black54,
                                 ),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'View All',
-                                  style: BaseTextStyle.labelLarge(
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                const Icon(Icons.chevron_right_sharp),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 82,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categories?.length ?? 0,
-                          separatorBuilder: (context, index) => const SizedBox(
-                            width: 8,
+                              const Icon(Icons.chevron_right_sharp),
+                            ],
                           ),
-                          itemBuilder: (context, index) {
-                            final category = categories?[index];
-
-                            return ImageTextButtonWidget(
-                              onPressed: () {},
-                              category: category,
-                              isSelected: false,
-                            );
-                          },
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 90,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories?.length ?? 0,
+                        separatorBuilder: (context, index) => const SizedBox(
+                          width: 8,
                         ),
+                        itemBuilder: (context, index) {
+                          final category = categories?[index];
+
+                          return ImageTextButtonWidget(
+                            onPressed: () {},
+                            category: category,
+                            isSelected: false,
+                          );
+                        },
                       ),
-                    ],
-                  ),
-                );
-              }
-          }
-        },
-      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+        }
+      },
     );
   }
 }
@@ -186,7 +153,7 @@ class ImageTextButtonWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4).add(const EdgeInsets.only(top: 8)),
       constraints: const BoxConstraints(),
       child: Column(
         children: [

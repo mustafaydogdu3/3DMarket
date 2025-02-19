@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../features/auth/services/auth_service.dart';
 import '../../../features/auth/views/home/view/auth_home_view.dart';
-import '../../../features/home/view/home_view.dart';
+import '../../../features/home/view/home_nav_view.dart';
 import '../../../features/profile/services/profile_service.dart';
 import '../../../features/profile/views/my_profile_view.dart';
 
@@ -77,7 +77,7 @@ class AppDrawer extends StatelessWidget {
             onTap: () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomeView(),
+                builder: (context) => const HomeNavView(),
               ),
             ),
           ),
