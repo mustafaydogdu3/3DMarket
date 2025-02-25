@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/category_model.dart';
+import '../models/slider_model.dart';
 
 class HomeService {
   const HomeService._();
@@ -48,6 +49,25 @@ class HomeService {
       return (null, subCategories);
     } catch (e) {
       return ('Failed to load sub categories!', null);
+    }
+  }
+
+  Future<(String?, List<SliderModel>?)> getSliders() async {
+    try {
+      final slidersSnap =
+          await FirebaseFirestore.instance.collection('sliders').get();
+
+      List<SliderModel> sliders = [];
+
+      for (var sliderDoc in slidersSnap.docs) {
+        final slider = SliderModel.fromJson(sliderDoc.data());
+
+        sliders.add(slider);
+      }
+
+      return (null, sliders);
+    } catch (e) {
+      return ('Failed to load categories!', null);
     }
   }
 }
