@@ -2,10 +2,10 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../product/values/colors/app_colors.dart';
-import '../models/category_model.dart';
 import '../services/home_service.dart';
 import 'widgets/carousel_slider_widget.dart';
+import 'widgets/image_text_button_widget.dart';
+import 'widgets/product_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({
@@ -53,8 +53,7 @@ class _HomeViewState extends State<HomeView> {
 
               return Container(
                 padding: const EdgeInsets.all(28),
-                child: Column(
-                  spacing: 24,
+                child: ListView(
                   children: [
                     SearchBar(
                       leading: const Icon(
@@ -81,6 +80,9 @@ class _HomeViewState extends State<HomeView> {
                           color: Colors.black87,
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 16,
                     ),
                     Column(
                       children: [
@@ -130,52 +132,20 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 32,
+                    ),
                     const CarouselSliderWidget(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const SuggestionProductsWidget(),
                   ],
                 ),
               );
             }
         }
       },
-    );
-  }
-}
-
-class ImageTextButtonWidget extends StatelessWidget {
-  const ImageTextButtonWidget({
-    super.key,
-    required this.onPressed,
-    required this.category,
-    required this.isSelected,
-  });
-
-  final void Function()? onPressed;
-  final CategoryModel? category;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: onPressed,
-      fillColor: isSelected ? AppColors.primary.withValues(alpha: 0.1) : null,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(4).add(const EdgeInsets.only(top: 8)),
-      constraints: const BoxConstraints(),
-      child: Column(
-        children: [
-          Image.network(
-            category?.imageUrl ?? '',
-            width: 50,
-            height: 50,
-          ),
-          Text(
-            category?.name ?? '',
-            style: BaseTextStyle.titleMedium(),
-          ),
-        ],
-      ),
     );
   }
 }

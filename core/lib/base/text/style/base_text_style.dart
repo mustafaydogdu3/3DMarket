@@ -110,11 +110,16 @@ class BaseTextStyle {
       );
 
   ///* 14px / 0.1 letter spacing
-  static labelLarge({FontWeight? fontWeight, Color? color}) =>
+  static labelLarge({
+    FontWeight? fontWeight,
+    Color? color,
+    TextDecoration? decoration,
+  }) =>
       context.labelLarge.copyWith(
         fontFamily: _font,
         fontWeight: fontWeight,
         color: color,
+        decoration: decoration,
       );
 
   ///* 12px / 0.5 letter spacing
