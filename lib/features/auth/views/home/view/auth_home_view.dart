@@ -7,7 +7,7 @@ import 'package:icons_plus/icons_plus.dart';
 import '../../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../../product/values/paths/app_paths.dart';
 import '../../../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../../../home/view/home_view.dart';
+import '../../../../home/view/home_nav_view.dart';
 import '../../../services/auth_service.dart';
 import '../../login/modals/login_with_email_modal.dart';
 import '../../register/modals/register_with_email_modal.dart';
@@ -81,7 +81,7 @@ class AuthHomeView extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const HomeView(),
+                                      builder: (context) => const HomeNavView(),
                                     ),
                                   );
                                 } else {

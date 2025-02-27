@@ -2,9 +2,10 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../product/values/colors/app_colors.dart';
-import '../models/category_model.dart';
 import '../services/home_service.dart';
+import 'widgets/carousel_slider_widget.dart';
+import 'widgets/image_text_button_widget.dart';
+import 'widgets/product_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({
@@ -51,8 +52,8 @@ class _HomeViewState extends State<HomeView> {
               final categories = failureOrCategories?.$2;
 
               return Container(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+                padding: const EdgeInsets.all(28),
+                child: ListView(
                   children: [
                     SearchBar(
                       leading: const Icon(
@@ -80,94 +81,71 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Column(
                       children: [
-                        Text(
-                          'Categories',
-                          style: BaseTextStyle.titleMedium(),
-                        ),
-                        TextButton(
-                          // View All butonuna basıldığında onViewAllPressed callback'ini çağır
-                          onPressed: widget.onViewAllPressed,
-                          child: Row(
-                            children: [
-                              Text(
-                                'View All',
-                                style: BaseTextStyle.labelLarge(
-                                  color: Colors.black54,
-                                ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Categories',
+                              style: BaseTextStyle.titleMedium(),
+                            ),
+                            TextButton(
+                              // View All butonuna basıldığında onViewAllPressed callback'ini çağır
+                              onPressed: widget.onViewAllPressed,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'View All',
+                                    style: BaseTextStyle.labelLarge(
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  const Icon(Icons.chevron_right_sharp),
+                                ],
                               ),
-                              const Icon(Icons.chevron_right_sharp),
-                            ],
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 90,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories?.length ?? 0,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              width: 8,
+                            ),
+                            itemBuilder: (context, index) {
+                              final category = categories?[index];
+
+                              return ImageTextButtonWidget(
+                                onPressed: () {},
+                                category: category,
+                                isSelected: false,
+                              );
+                            },
                           ),
-                        )
+                        ),
                       ],
                     ),
-                    SizedBox(
-                      height: 90,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories?.length ?? 0,
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 8,
-                        ),
-                        itemBuilder: (context, index) {
-                          final category = categories?[index];
-
-                          return ImageTextButtonWidget(
-                            onPressed: () {},
-                            category: category,
-                            isSelected: false,
-                          );
-                        },
-                      ),
+                    const SizedBox(
+                      height: 32,
                     ),
+                    const CarouselSliderWidget(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const SuggestionProductsWidget(),
                   ],
                 ),
               );
             }
         }
       },
-    );
-  }
-}
-
-class ImageTextButtonWidget extends StatelessWidget {
-  const ImageTextButtonWidget({
-    super.key,
-    required this.onPressed,
-    required this.category,
-    required this.isSelected,
-  });
-
-  final void Function()? onPressed;
-  final CategoryModel? category;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: onPressed,
-      fillColor: isSelected ? AppColors.primary.withValues(alpha: 0.1) : null,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(4).add(const EdgeInsets.only(top: 8)),
-      constraints: const BoxConstraints(),
-      child: Column(
-        children: [
-          Image.network(
-            category?.imageUrl ?? '',
-            width: 50,
-            height: 50,
-          ),
-          Text(
-            category?.name ?? '',
-            style: BaseTextStyle.titleMedium(),
-          ),
-        ],
-      ),
     );
   }
 }

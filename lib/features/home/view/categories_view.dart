@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/category_model.dart';
 import '../services/home_service.dart';
-import 'home_view.dart';
+import 'widgets/image_text_button_widget.dart';
 
 class CategoriesView extends StatefulWidget {
   const CategoriesView({

@@ -5,7 +5,6 @@ import 'package:icons_plus/icons_plus.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
 import '../../../product/values/paths/app_paths.dart';
-import '../../../product/widgets/drawers/app_drawer.dart';
 import '../services/profile_service.dart';
 import 'add_addresses_view.dart';
 import 'addresses_view.dart';
@@ -33,9 +32,8 @@ class _MyProfileViewState extends State<MyProfileView> {
               canPop: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: const Text(AppLocalkeys.editProfil),
+                  title: const Text(AppLocalkeys.myProfile),
                 ),
-                drawer: const AppDrawer(),
                 body: const Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -48,7 +46,7 @@ class _MyProfileViewState extends State<MyProfileView> {
 
             return Scaffold(
               appBar: AppBar(
-                title: const Text(AppLocalkeys.editProfil),
+                title: const Text(AppLocalkeys.myProfile),
                 actions: [
                   ElevatedButton(
                     onPressed: () => Navigator.push(
@@ -100,7 +98,6 @@ class _MyProfileViewState extends State<MyProfileView> {
                   ),
                 ],
               ),
-              drawer: const AppDrawer(),
               body: SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -141,17 +138,8 @@ class _MyProfileViewState extends State<MyProfileView> {
                             return const SizedBox();
 
                           case ConnectionState.waiting:
-                            return PopScope(
-                              canPop: false,
-                              child: Scaffold(
-                                appBar: AppBar(
-                                  title: const Text(AppLocalkeys.editProfil),
-                                ),
-                                drawer: const AppDrawer(),
-                                body: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
+                            return const Center(
+                              child: CircularProgressIndicator(),
                             );
 
                           case ConnectionState.active:

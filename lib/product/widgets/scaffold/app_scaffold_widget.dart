@@ -18,6 +18,10 @@ class AppScaffoldWidget extends StatefulWidget {
 
 class AppScaffoldWidgetState extends State<AppScaffoldWidget> {
   int currentIndex = 0;
+  List<String> titles = [
+    'Home',
+    'Categories',
+  ];
 
   // Sayfa değiştirme metodu eklendi
   void changeTab(int index) {
