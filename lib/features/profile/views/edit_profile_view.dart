@@ -44,7 +44,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppLocalkeys.editProfil),
+        title: const Text(AppLocalkeys.editProfile),
       ),
       // drawer: const AppDrawer(),
       body: SingleChildScrollView(

@@ -55,7 +55,7 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.5,
+                  childAspectRatio: 0.68,
                 ),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),

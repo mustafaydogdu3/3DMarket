@@ -28,7 +28,6 @@ class _HomeNavViewState extends State<HomeNavView> {
       key: _scaffoldKey,
       views: [
         HomeView(
-          // View All butonuna basıldığında Categories Tab'ına geçiş yapacak
           onViewAllPressed: () => navigateToTab(1),
         ),
         FutureBuilder(

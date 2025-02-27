@@ -20,7 +20,7 @@ class AppLocalkeys {
   static const name = 'Name';
   static const mobileNumber = 'Mobile Number';
   static const location = 'Location';
-  static const editProfil = 'Edit Profile';
+  static const editProfile = 'Edit Profile';
   static const saveChanges = 'Save Changes';
   static const streetDetail = 'Street Details';
   static const landMark = 'Land Mark';
