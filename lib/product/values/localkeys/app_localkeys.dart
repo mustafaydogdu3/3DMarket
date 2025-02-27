@@ -30,6 +30,9 @@ class AppLocalkeys {
   static const saveAddress = 'Save Address';
   static const settings = 'Settings';
   static const logout = 'Logout';
+  static const logoutExit = 'Logout?';
   static const address = 'Address';
   static const myProfile = 'My Profile';
+  static const logoutMessage =
+      'Are you sure you want to logout? Once logged out, you will be returned to login screen';
 }

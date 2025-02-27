@@ -33,79 +33,83 @@ class AppScaffoldWidgetState extends State<AppScaffoldWidget> {
     // Scaffold key eklendi
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: const AppDrawer(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.2),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(
-              'Categories',
-              style: BaseTextStyle.titleLarge(
-                fontWeight: FontWeight.w500,
-              ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) => showLogoutModal(context),
+      child: Scaffold(
+        key: scaffoldKey,
+        drawer: const AppDrawer(),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  OctIcons.bell,
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: Text(
+                'Categories',
+                style: BaseTextStyle.titleLarge(
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Transform.scale(
-                  scale: 0.9,
-                  alignment: Alignment.topCenter,
-                  child: const Icon(
-                    FontAwesome.bag_shopping_solid,
-                    size: 28,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    OctIcons.bell,
                   ),
                 ),
-              ),
-            ],
+                IconButton(
+                  onPressed: () {},
+                  icon: Transform.scale(
+                    scale: 0.9,
+                    alignment: Alignment.topCenter,
+                    child: const Icon(
+                      FontAwesome.bag_shopping_solid,
+                      size: 28,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (value) => setState(() {
-          currentIndex = value;
-        }),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesome.house_solid,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (value) => setState(() {
+            currentIndex = value;
+          }),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                FontAwesome.house_solid,
+              ),
+              label: 'Home',
             ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.grid_view_outlined,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.grid_view_outlined,
+              ),
+              label: 'Categories',
             ),
-            label: 'Categories',
-          ),
-        ],
+          ],
+        ),
+        body: widget.views[currentIndex],
       ),
-      body: widget.views[currentIndex],
     );
   }
 }
