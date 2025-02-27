@@ -117,6 +117,9 @@ void showLogoutModal(BuildContext context) {
                 ElevatedButton(
                   onPressed: () {
                     AuthService.instance.logout();
+
+                    Navigator.popUntil(context, (route) => route.isFirst);
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
