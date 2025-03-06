@@ -2,7 +2,7 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../splash/view/splash_view.dart';
+import '../../auth/views/interest_view.dart';
 
 class AppView extends StatelessWidget {
   const AppView({super.key});
@@ -18,7 +18,7 @@ class AppView extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: AppLocalkeys.appName,
-      home: const SplashView(),
+      home: const InterestView(),
     );
   }
 }
