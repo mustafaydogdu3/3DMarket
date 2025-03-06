@@ -5,7 +5,7 @@ import 'package:icons_plus/icons_plus.dart';
 import '../services/home_service.dart';
 import 'widgets/carousel_slider_widget.dart';
 import 'widgets/image_text_button_widget.dart';
-import 'widgets/product_widget.dart';
+import 'widgets/suggestion_products_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({

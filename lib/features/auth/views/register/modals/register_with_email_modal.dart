@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../../../product/validators/validator.dart';
 import '../../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../../../home/view/home_view.dart';
 import '../../../services/auth_service.dart';
+import '../../instrest/view/interest_view.dart';
 
 class RegisterWithEmailModal extends StatelessWidget {
   const RegisterWithEmailModal({
@@ -156,7 +156,7 @@ class RegisterWithEmailModal extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeView(),
+                          builder: (context) => const InterestView(),
                         ),
                       );
                     } else {

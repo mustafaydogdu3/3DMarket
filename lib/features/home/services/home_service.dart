@@ -12,48 +12,47 @@ class HomeService {
 
   Future<(String?, List<ProductModel>?)> getSuggestionProducts() async {
     try {
-      List<ProductModel> suggestionProducts = [];
+      List<ProductModel> interestProducts = [];
 
       final currentUser = FirebaseAuth.instance.currentUser;
 
       final userProductSuggestionsSnap = await FirebaseFirestore.instance
-          .collection('user_product_suggestions')
+          .collection('user_interests')
           .where('userFK', isEqualTo: currentUser?.uid)
           .get();
 
-      List<String> suggestionFKs = [];
+      List<String> interestFKs = [];
 
       for (var userProductSuggestionDoc in userProductSuggestionsSnap.docs) {
-        final suggestionFK = userProductSuggestionDoc.data()['suggestionFK'];
+        final interestFK = userProductSuggestionDoc.data()['interestFK'];
 
-        suggestionFKs.add(suggestionFK);
+        interestFKs.add(interestFK);
       }
 
-      for (var suggestionFK in suggestionFKs) {
-        final suggestionCategoriesSnap = await FirebaseFirestore.instance
+      for (var interestFK in interestFKs) {
+        final interestCategoriesSnap = await FirebaseFirestore.instance
             .collection('sub_categories')
-            .where('suggestionFK', isEqualTo: suggestionFK)
+            .where('interestFK', isEqualTo: interestFK)
             .get();
 
-        for (var suggestionCategoryDoc in suggestionCategoriesSnap.docs) {
-          final suggestionProductsSnap = await FirebaseFirestore.instance
+        for (var interestCategoryDoc in interestCategoriesSnap.docs) {
+          final interestProductsSnap = await FirebaseFirestore.instance
               .collection('products')
-              .where('categoryFK',
-                  isEqualTo: suggestionCategoryDoc.data()['id'])
+              .where('categoryFK', isEqualTo: interestCategoryDoc.data()['id'])
               .get();
 
-          for (var suggestionProductDoc in suggestionProductsSnap.docs) {
-            final suggestionProduct =
-                ProductModel.fromJson(suggestionProductDoc.data());
+          for (var interestProductDoc in interestProductsSnap.docs) {
+            final interestProduct =
+                ProductModel.fromJson(interestProductDoc.data());
 
-            suggestionProducts.add(suggestionProduct);
+            interestProducts.add(interestProduct);
           }
         }
       }
 
-      return (null, suggestionProducts);
+      return (null, interestProducts);
     } catch (e) {
-      return ('Failed to load suggestion products!', null);
+      return ('Failed to load interest products!', null);
     }
   }
 

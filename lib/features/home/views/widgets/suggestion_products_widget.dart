@@ -50,7 +50,7 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                 child: Text(failure ?? ''),
               );
             } else {
-              final suggestionProducts = failureOrSuggestionProducts?.$2;
+              final interestProducts = failureOrSuggestionProducts?.$2;
 
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -59,9 +59,9 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                 ),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: suggestionProducts?.length,
+                itemCount: interestProducts?.length,
                 itemBuilder: (context, index) {
-                  final suggestionProduct = suggestionProducts?[index];
+                  final interestProduct = interestProducts?[index];
 
                   return RawMaterialButton(
                     onPressed: () {},
@@ -76,27 +76,27 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Image.network(
-                                  suggestionProduct?.imageUrl ?? '')),
+                                  interestProduct?.imageUrl ?? '')),
                           Text(
-                            suggestionProduct?.name ?? '',
+                            interestProduct?.name ?? '',
                             style: BaseTextStyle.bodyLarge(),
                           ),
                           Row(
                             spacing: 8,
                             children: [
                               Text(
-                                '₺${suggestionProduct?.discountedPrice?.toStringAsFixed(0)}',
+                                '₺${interestProduct?.discountedPrice?.toStringAsFixed(0)}',
                                 style: BaseTextStyle.labelLarge(),
                               ),
                               Text(
-                                '₺${suggestionProduct?.price?.toStringAsFixed(0)}',
+                                '₺${interestProduct?.price?.toStringAsFixed(0)}',
                                 style: BaseTextStyle.labelLarge(
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.grey,
                                 ),
                               ),
                               Text(
-                                '${suggestionProduct?.discountRate?.toStringAsFixed(0)}% OFF',
+                                '${interestProduct?.discountRate?.toStringAsFixed(0)}% OFF',
                                 style: BaseTextStyle.labelLarge(
                                   color: Colors.deepOrangeAccent,
                                 ),
@@ -121,13 +121,13 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                                     ),
                                   ),
                                   Text(
-                                    suggestionProduct?.rating.toString() ?? '',
+                                    interestProduct?.rating.toString() ?? '',
                                     style: BaseTextStyle.labelLarge(),
                                   )
                                 ],
                               ),
                               Text(
-                                '(${suggestionProduct?.ratingCount})',
+                                '(${interestProduct?.ratingCount})',
                                 style: BaseTextStyle.labelLarge(
                                   color: Colors.grey,
                                 ),

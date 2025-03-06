@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../../product/validators/validator.dart';
 import '../../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../../../home/view/home_view.dart';
+import '../../../../home/views/home_nav_view.dart';
 import '../../../services/auth_service.dart';
 import '../../forgot_password/view/forgot_password_view.dart';
 
@@ -149,7 +149,7 @@ class _LoginWithEmailModalState extends State<LoginWithEmailModal> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeView(),
+                          builder: (context) => const HomeNavView(),
                         ),
                       );
                     } else {

@@ -42,5 +42,7 @@ Delete
 SHA1 Key
 SHA256 Key
 
-Record Type
+Record Type 
+parantez içerisinde 2 tür oluşturabilmemizi sağlar
+sol taraftaki türe $1, sağ taraftaki türe $2 ile erişebiliriz.
 Either Type dartz kütüphanesi

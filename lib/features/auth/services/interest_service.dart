@@ -15,7 +15,7 @@ class InterestService {
 
   Future<List<InterestModel>> getInterests() async {
     try {
-      final snapshot = await _firestore.collection('product_suggestions').get();
+      final snapshot = await _firestore.collection('interests').get();
 
       return snapshot.docs.map((doc) {
         final data = doc.data();
@@ -36,18 +36,18 @@ class InterestService {
       if (user == null) throw Exception('User not found');
 
       final userInterestsSnapshot = await _firestore
-          .collection('user_product_suggestions')
+          .collection('user_interests')
           .where('userFK', isEqualTo: user.uid)
           .get();
 
       final List<String> interestIds = userInterestsSnapshot.docs
-          .map((doc) => doc.data()['suggestionFK'] as String)
+          .map((doc) => doc.data()['interestFK'] as String)
           .toList();
 
       if (interestIds.isEmpty) return [];
 
       final interestsSnapshot = await _firestore
-          .collection('product_suggestions')
+          .collection('interests')
           .where(FieldPath.documentId, whereIn: interestIds)
           .get();
 
@@ -71,7 +71,7 @@ class InterestService {
 
       // Delete existing interests
       final existingDocs = await _firestore
-          .collection('user_product_suggestions')
+          .collection('user_interests')
           .where('userFK', isEqualTo: user.uid)
           .get();
 
@@ -81,11 +81,11 @@ class InterestService {
 
       // Add new interests
       for (var interest in selectedInterests) {
-        final docRef = _firestore.collection('user_product_suggestions').doc();
+        final docRef = _firestore.collection('user_interests').doc();
         docRef.set({
           'id': const Uuid().v4(),
           'userFK': user.uid,
-          'suggestionFK': interest.id,
+          'interestFK': interest.id,
           'createdAt': FieldValue.serverTimestamp(),
         });
       }

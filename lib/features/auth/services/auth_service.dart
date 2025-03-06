@@ -69,7 +69,7 @@ class AuthService {
     }
   }
 
-  Future<String?> loginWithGoogle() async {
+  Future<(String?, bool?)> loginWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -91,6 +91,8 @@ class AuthService {
           .where('id', isEqualTo: firebaseUser?.uid)
           .get();
 
+      bool isRegister = false;
+
       if (snap.docs.isEmpty) {
         await FirebaseFirestore.instance.collection('users').add(
           {
@@ -100,11 +102,13 @@ class AuthService {
             'photoUrl': googleUser?.photoUrl,
           },
         );
+
+        isRegister = true;
       }
 
-      return null;
+      return (null, isRegister);
     } catch (e) {
-      return 'Unexpected error occurred!';
+      return ('Unexpected error occurred!', null);
     }
   }
 

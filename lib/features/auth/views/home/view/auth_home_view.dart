@@ -7,8 +7,9 @@ import 'package:icons_plus/icons_plus.dart';
 import '../../../../../product/values/localkeys/app_localkeys.dart';
 import '../../../../../product/values/paths/app_paths.dart';
 import '../../../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../../../home/view/home_nav_view.dart';
+import '../../../../home/views/home_nav_view.dart';
 import '../../../services/auth_service.dart';
+import '../../instrest/view/interest_view.dart';
 import '../../login/modals/login_with_email_modal.dart';
 import '../../register/modals/register_with_email_modal.dart';
 
@@ -67,27 +68,44 @@ class AuthHomeView extends StatelessWidget {
                                   ),
                                 );
 
-                                final error = await AuthService.instance
-                                    .loginWithGoogle();
+                                final failureOrRegisterStatus =
+                                    await AuthService.instance
+                                        .loginWithGoogle();
 
                                 if (!context.mounted) return;
 
                                 Navigator.pop(context);
 
-                                if (error == null) {
+                                if (failureOrRegisterStatus.$1 == null) {
+                                  final registerStatus =
+                                      failureOrRegisterStatus.$2!;
+
                                   Navigator.popUntil(
                                       context, (route) => route.isFirst);
 
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const HomeNavView(),
-                                    ),
-                                  );
+                                  if (registerStatus) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const InterestView(),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeNavView(),
+                                      ),
+                                    );
+                                  }
                                 } else {
+                                  final error = failureOrRegisterStatus.$1;
+
                                   BaseSnackbarWidget.showOverlaySnackBar(
                                     context: context,
-                                    message: error,
+                                    message: error!,
                                     backgroundColor: Colors.red,
                                     style: BaseTextStyle.labelLarge(),
                                   );

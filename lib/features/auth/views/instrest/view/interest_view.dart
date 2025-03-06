@@ -1,9 +1,9 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../home/view/home_nav_view.dart';
-import '../models/interest_model.dart';
-import '../services/interest_service.dart';
+import '../../../../home/views/home_nav_view.dart';
+import '../../../models/interest_model.dart';
+import '../../../services/interest_service.dart';
 
 class InterestView extends StatefulWidget {
   const InterestView({super.key});
