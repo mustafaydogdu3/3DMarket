@@ -25,6 +25,11 @@ class _HomeNavViewState extends State<HomeNavView> {
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWidget(
+      titles: [
+        'Home',
+        'Categories',
+      ],
+      showDrawer: true,
       key: _scaffoldKey,
       views: [
         HomeView(

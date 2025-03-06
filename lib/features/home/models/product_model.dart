@@ -6,7 +6,7 @@ class ProductModel extends Equatable {
     required this.id,
     required this.categoryFK,
     required this.name,
-    required this.imageUrl,
+    required this.imageUrls,
     required this.price,
     required this.discountedPrice,
     required this.discountRate,
@@ -18,7 +18,7 @@ class ProductModel extends Equatable {
   final String? id;
   final String? categoryFK;
   final String? name;
-  final String? imageUrl;
+  final List<String?>? imageUrls;
   final double? price;
   final double? discountedPrice;
   final double? discountRate;
@@ -31,7 +31,7 @@ class ProductModel extends Equatable {
       id: '',
       name: '',
       categoryFK: '',
-      imageUrl: '',
+      imageUrls: [],
       price: 0,
       discountedPrice: 0,
       discountRate: 0,
@@ -46,7 +46,7 @@ class ProductModel extends Equatable {
       id: json['id'],
       name: json['name'],
       categoryFK: json['categoryFK'],
-      imageUrl: json['imageUrl'],
+      imageUrls: List<String>.from(json['imageUrls']),
       price: double.parse(json['price'].toString()),
       discountedPrice: double.parse(json['discountedPrice'].toString()),
       discountRate: double.parse(json['discountRate'].toString()),
@@ -62,7 +62,7 @@ class ProductModel extends Equatable {
     data['id'] = id;
     data['name'] = name;
     data['categoryFK'] = categoryFK;
-    data['imageUrl'] = imageUrl;
+    data['imageUrls'] = imageUrls;
     data['price'] = price;
     data['discountedPrice'] = discountedPrice;
     data['discountRate'] = discountRate;
@@ -77,7 +77,7 @@ class ProductModel extends Equatable {
     String? id,
     String? categoryFK,
     String? name,
-    String? imageUrl,
+    List<String?>? imageUrls,
     double? price,
     double? discountedPrice,
     double? discountRate,
@@ -89,7 +89,7 @@ class ProductModel extends Equatable {
       id: id ?? this.id,
       categoryFK: categoryFK ?? this.categoryFK,
       name: name ?? this.name,
-      imageUrl: imageUrl ?? this.imageUrl,
+      imageUrls: imageUrls ?? this.imageUrls,
       price: price ?? this.price,
       discountedPrice: discountedPrice ?? this.discountedPrice,
       discountRate: discountRate ?? this.discountRate,
@@ -104,7 +104,7 @@ class ProductModel extends Equatable {
         id,
         name,
         categoryFK,
-        imageUrl,
+        imageUrls,
         price,
         discountedPrice,
         discountRate,

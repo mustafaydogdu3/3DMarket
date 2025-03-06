@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/product_model.dart';
 import '../../services/home_service.dart';
+import '../product_details_view.dart';
 
 class SuggestionProductsWidget extends StatefulWidget {
   const SuggestionProductsWidget({super.key});
@@ -64,7 +65,11 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                   final interestProduct = interestProducts?[index];
 
                   return RawMaterialButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProductDetailsView(),
+                        )),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -76,7 +81,7 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Image.network(
-                                  interestProduct?.imageUrl ?? '')),
+                                  interestProduct?.imageUrls?.last ?? '')),
                           Text(
                             interestProduct?.name ?? '',
                             style: BaseTextStyle.bodyLarge(),
