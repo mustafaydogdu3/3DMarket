@@ -68,7 +68,9 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProductDetailsView(),
+                          builder: (context) => ProductDetailsView(
+                            product: interestProduct!,
+                          ),
                         )),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
