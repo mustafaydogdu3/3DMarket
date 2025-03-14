@@ -4,36 +4,39 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../product/validators/validator.dart';
 import '../../../product/widgets/buttons/primary_button_widget.dart';
 import '../models/product_model.dart';
+import '../models/review_model.dart';
+import '../services/review_service.dart';
 
 class WriteReviewPage extends StatefulWidget {
-  final ProductModel product;
-
   const WriteReviewPage({
     super.key,
     required this.product,
   });
+
+  final ProductModel product;
 
   @override
   State<WriteReviewPage> createState() => _WriteReviewPageState();
 }
 
 class _WriteReviewPageState extends State<WriteReviewPage> {
-  final TextEditingController _headingController = TextEditingController();
-  final TextEditingController _reviewController = TextEditingController();
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  double _rating = 5;
-  final List<File> _images = [];
-
   @override
   void dispose() {
     _headingController.dispose();
     _reviewController.dispose();
     super.dispose();
   }
+
+  double _rating = 5;
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _headingController = TextEditingController();
+  final TextEditingController _reviewController = TextEditingController();
+  final List<File> _images = [];
 
   Future<void> _pickImage() async {
     final pickedFile =
@@ -221,7 +224,7 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
         padding: const EdgeInsets.all(18.0),
         child: PrimaryButtonWidget(
           text: 'Submit Review',
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState!.validate()) {
               showDialog(
                 context: context,
@@ -233,6 +236,31 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                   ),
                 ),
               );
+
+              final review = ReviewModel(
+                id: const Uuid().v4(),
+                productFK: widget.product.id,
+                heading: _headingController.text,
+                review: _reviewController.text,
+                rating: _rating,
+              );
+
+              final failureOrSuccess = await ReviewService.instance.addReview(
+                review,
+                _images,
+              );
+
+              Navigator.pop(context);
+
+              if (failureOrSuccess.$1 != null) {
+                final error = failureOrSuccess.$1;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $error')),
+                );
+              } else {
+                Navigator.pop(context);
+              }
             }
           },
         ),

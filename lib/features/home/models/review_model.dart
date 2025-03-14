@@ -1,42 +1,79 @@
-class ReviewModel {
-  final String? id;
-  final String productId;
-  final String userId;
-  final String heading;
-  final String review;
-  final double rating;
-  final List<String>? imageUrls;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
 
-  ReviewModel({
-    this.id,
-    required this.productId,
-    required this.userId,
+class ReviewModel extends Equatable {
+  const ReviewModel({
+    required this.id,
+    required this.productFK,
+    this.userFK,
     required this.heading,
     required this.review,
     required this.rating,
     this.imageUrls,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'productId': productId,
-      'userId': userId,
-      'heading': heading,
-      'review': review,
-      'rating': rating,
-      'imageUrls': imageUrls,
-    };
-  }
+  final String? id;
+  final String? productFK;
+  final String? userFK;
+  final String? heading;
+  final String? review;
+  final double? rating;
+  final List<String>? imageUrls;
 
-  factory ReviewModel.fromMap(Map<String, dynamic> map, String id) {
+  factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
-      id: id,
-      productId: map['productId'] ?? '',
-      userId: map['userId'] ?? '',
-      heading: map['heading'] ?? '',
-      review: map['review'] ?? '',
-      rating: (map['rating'] ?? 0.0).toDouble(),
-      imageUrls: List<String>.from(map['imageUrls'] ?? []),
+      id: json['id'],
+      productFK: json['productFK'],
+      userFK: json['userFK'],
+      heading: json['heading'],
+      review: json['review'],
+      rating: json['rating'],
+      imageUrls: json['imageUrls'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['id'] = id;
+    data['productFK'] = productFK;
+    data['userFK'] = userFK;
+    data['heading'] = heading;
+    data['review'] = review;
+    data['rating'] = rating;
+    data['imageUrls'] = imageUrls;
+
+    return data;
+  }
+
+  ReviewModel copyWith({
+    String? id,
+    String? productFK,
+    String? userFK,
+    String? heading,
+    String? review,
+    double? rating,
+    List<String>? imageUrls,
+  }) {
+    return ReviewModel(
+      id: id ?? this.id,
+      productFK: productFK ?? this.productFK,
+      userFK: userFK ?? this.userFK,
+      heading: heading ?? this.heading,
+      review: review ?? this.review,
+      rating: rating ?? this.rating,
+      imageUrls: imageUrls ?? this.imageUrls,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        productFK,
+        userFK,
+        heading,
+        review,
+        rating,
+        imageUrls,
+      ];
 }
