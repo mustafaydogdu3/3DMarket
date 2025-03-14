@@ -25,7 +25,8 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
   final TextEditingController _headingController = TextEditingController();
   final TextEditingController _reviewController = TextEditingController();
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  double _rating = 0;
+  double _rating = 5;
+  final List<File> _images = [];
 
   @override
   void dispose() {
@@ -34,17 +35,21 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
     super.dispose();
   }
 
-  File? _image;
-
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
+        _images.add(File(pickedFile.path));
       });
     }
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _images.removeAt(index);
+    });
   }
 
   @override
@@ -61,11 +66,10 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                spacing: 20,
                 children: [
                   Container(
-                    width: 60,
-                    height: 60,
+                    width: MediaQuery.of(context).size.width * 0.20,
+                    height: 75,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
@@ -75,37 +79,38 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      widget.product.name ?? '',
-                      style: BaseTextStyle.bodyLarge(
-                        fontWeight: FontWeight.bold,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          widget.product.name ?? '',
+                          maxLines: 2,
+                          style: BaseTextStyle.bodyLarge(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: RatingBar.builder(
-                      initialRating: _rating,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+                      RatingBar.builder(
+                        initialRating: _rating,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          setState(() {
+                            _rating = rating;
+                          });
+                        },
                       ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          _rating = rating;
-                        });
-                      },
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -135,44 +140,8 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              Row(
                 children: [
-                  if (_image != null)
-                    Stack(
-                      children: [
-                        Image.file(
-                          _image!,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          right: 4,
-                          top: 4,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _image = null;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.black54,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   GestureDetector(
                     onTap: _pickImage,
                     child: Container(
@@ -198,6 +167,50 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: SizedBox(
+                      height: 80,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _images.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Stack(
+                              children: [
+                                Image.file(
+                                  _images[index],
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                                Positioned(
+                                  right: 4,
+                                  top: 4,
+                                  child: GestureDetector(
+                                    onTap: () => _removeImage(index),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.black54,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -205,7 +218,7 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18.0),
         child: PrimaryButtonWidget(
           text: 'Submit Review',
           onPressed: () {
