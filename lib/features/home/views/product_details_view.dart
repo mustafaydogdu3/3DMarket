@@ -5,6 +5,7 @@ import 'package:icons_plus/icons_plus.dart';
 
 import '../../../product/widgets/scaffold/app_scaffold_widget.dart';
 import '../models/product_model.dart';
+import 'reviews_detail.dart';
 import 'write_review_page.dart';
 
 class ProductDetailsView extends StatefulWidget {
@@ -184,6 +185,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   ),
                 ],
               ),
+            ),
+            ReviewsDetail(
+              product: widget.product,
             ),
           ],
         ),

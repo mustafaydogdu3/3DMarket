@@ -28,7 +28,6 @@ class ReviewModel extends Equatable {
       heading: json['heading'],
       review: json['review'],
       rating: json['rating'],
-      imageUrls: json['imageUrls'],
     );
   }
 
