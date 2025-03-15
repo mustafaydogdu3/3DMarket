@@ -53,28 +53,47 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                 itemCount: reviews?.length,
                 itemBuilder: (context, index) {
                   final review = reviews?[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 20,
-                    children: [
-                      RatingBarIndicator(
-                        rating: review?.rating ?? 0,
-                        itemBuilder: (context, index) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 10,
+                      children: [
+                        RatingBarIndicator(
+                          rating: review?.rating ?? 0,
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 20,
                         ),
-                        itemCount: 5,
-                        itemSize: 20,
-                      ),
-                      Text(
-                        review?.heading ?? 'No Title',
-                        style: BaseTextStyle.bodySmall(),
-                      ),
-                      Text(
-                        review?.review ?? 'No Review',
-                        style: BaseTextStyle.bodyMedium(),
-                      ),
-                    ],
+                        Text(
+                          review?.heading ?? 'No Title',
+                          maxLines: 1,
+                          style: BaseTextStyle.bodyLarge(
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          maxLines: 5,
+                          review?.review ?? 'No Review',
+                          style: BaseTextStyle.bodyMedium(),
+                        ),
+                        SizedBox(
+                          height: 80,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                    review?.imageUrls?[index] ?? ''),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   );
                 },
               );
