@@ -81,15 +81,23 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                         ),
                         SizedBox(
                           height: 80,
-                          child: ListView(
+                          child: ListView.separated(
                             scrollDirection: Axis.horizontal,
-                            children: [
-                              ClipRRect(
+                            itemCount: review?.imageUrls?.length ?? 0,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              width: 16,
+                            ),
+                            itemBuilder: (context, index) {
+                              return ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.network(
-                                    review?.imageUrls?[index] ?? ''),
-                              )
-                            ],
+                                  review?.imageUrls?[index] ?? '',
+                                  width: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            },
                           ),
                         )
                       ],

@@ -79,7 +79,7 @@ class ReviewService {
 
       return (null, reviews);
     } catch (e) {
-      return (null, null);
+      return (e.toString(), null);
     }
   }
 }
