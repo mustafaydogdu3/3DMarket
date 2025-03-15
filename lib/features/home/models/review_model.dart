@@ -27,7 +27,7 @@ class ReviewModel extends Equatable {
       userFK: json['userFK'],
       heading: json['heading'],
       review: json['review'],
-      rating: json['rating'],
+      rating: (json['rating'] as int).toDouble(),
     );
   }
 

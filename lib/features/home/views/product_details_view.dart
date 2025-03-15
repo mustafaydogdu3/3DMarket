@@ -105,7 +105,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

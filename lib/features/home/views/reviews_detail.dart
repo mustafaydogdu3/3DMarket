@@ -26,6 +26,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
         switch (snap.connectionState) {
           case ConnectionState.none:
             return const SizedBox();
+
           case ConnectionState.waiting:
             return const PopScope(
               canPop: false,
@@ -33,39 +34,51 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                 child: CircularProgressIndicator(),
               ),
             );
+
           case ConnectionState.active:
           case ConnectionState.done:
-            final (error, reviews) = snap.data ?? (null, null);
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: reviews?.length,
-              itemBuilder: (context, index) {
-                final review = reviews?[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 20,
-                  children: [
-                    RatingBarIndicator(
-                      rating: review?.rating ?? 0,
-                      itemBuilder: (context, index) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+            final failureOrReviews = snap.data;
+
+            if (failureOrReviews?.$1 != null) {
+              final failure = failureOrReviews?.$1;
+
+              return Card(
+                child: Text(failure ?? ''),
+              );
+            } else {
+              final reviews = failureOrReviews?.$2;
+
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: reviews?.length,
+                itemBuilder: (context, index) {
+                  final review = reviews?[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 20,
+                    children: [
+                      RatingBarIndicator(
+                        rating: review?.rating ?? 0,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 20,
                       ),
-                      itemCount: 5,
-                      itemSize: 20,
-                    ),
-                    Text(
-                      review?.heading ?? 'No Title',
-                      style: BaseTextStyle.bodySmall(),
-                    ),
-                    Text(
-                      review?.review ?? 'No Review',
-                      style: BaseTextStyle.bodyMedium(),
-                    ),
-                  ],
-                );
-              },
-            );
+                      Text(
+                        review?.heading ?? 'No Title',
+                        style: BaseTextStyle.bodySmall(),
+                      ),
+                      Text(
+                        review?.review ?? 'No Review',
+                        style: BaseTextStyle.bodyMedium(),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
         }
       },
     );
