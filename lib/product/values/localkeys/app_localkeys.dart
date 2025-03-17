@@ -35,4 +35,5 @@ class AppLocalkeys {
   static const myProfile = 'My Profile';
   static const logoutMessage =
       'Are you sure you want to logout? Once logged out, you will be returned to login screen';
+  static const ratingRaviews = 'Rating & Reviews';
 }
