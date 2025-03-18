@@ -25,6 +25,7 @@ class _ReviewsModalState extends State<ReviewsModal> {
       maxChildSize: 0.95,
       builder: (context, scrollController) {
         return Container(
+          height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
             color: Colors.white,

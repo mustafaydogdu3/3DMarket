@@ -53,6 +53,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
               final reviewCount = reviews!.length;
 
               return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: reviewCount,
                 itemBuilder: (context, index) {
