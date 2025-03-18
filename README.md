@@ -46,3 +46,9 @@ Record Type
 parantez içerisinde 2 tür oluşturabilmemizi sağlar
 sol taraftaki türe $1, sağ taraftaki türe $2 ile erişebiliriz.
 Either Type dartz kütüphanesi
+
+.. (iki nokta yan yana) cascade operasyonu
+ dönüş türünü etkilemeden işlem yapabilmeni sağlar
+
+... (üç nokta yan yana)
+ ui içerisinde işlem yapıp widget dönebilmeni sağlar

@@ -1,10 +1,12 @@
+import 'dart:ui';
+
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
 import '../models/product_model.dart';
 import '../services/review_service.dart';
+import 'reviews_detail.dart';
 import 'sortby_modal.dart';
 
 class ReviewsModal extends StatefulWidget {
@@ -19,10 +21,16 @@ class ReviewsModal extends StatefulWidget {
 class _ReviewsModalState extends State<ReviewsModal> {
   @override
   Widget build(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height +
+        window.viewPadding.top +
+        kToolbarHeight;
+
+    final statusBarHeight = window.viewPadding.top / 2;
+
+    final statusBarPercentange = (statusBarHeight * 100 / deviceHeight) / 100;
+
     return DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
+      initialChildSize: 1 - statusBarPercentange,
       builder: (context, scrollController) {
         return Container(
           height: MediaQuery.of(context).size.height,
@@ -50,37 +58,73 @@ class _ReviewsModalState extends State<ReviewsModal> {
                     ),
                   ],
                 ),
-                const Divider(),
-                Row(
-                  spacing: 40,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => const SortbyModal(),
-                        );
-                      },
-                      label: const Text('Sort By'),
-                      icon: const Icon(Icons.sort),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 20,
-                      color: Colors.grey,
-                    ),
-                    TextButton.icon(
-                      onPressed: () {},
-                      label: const Text('Filter'),
-                      icon: const Icon(Icons.tune),
-                    ),
-                  ],
+                Container(
+                  padding: const EdgeInsets.only(top: 8, bottom: 12),
+                  child: Column(
+                    children: [
+                      const Divider(),
+                      IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: RawMaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => const SortbyModal(),
+                                  );
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: TextButton.icon(
+                                    onPressed: null,
+                                    style: TextButton.styleFrom(
+                                      disabledForegroundColor: Colors.black87,
+                                      disabledIconColor: Colors.black87,
+                                    ),
+                                    label: const Text('Sort By'),
+                                    icon: const Icon(Icons.sort),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
+                              child: const VerticalDivider(),
+                            ),
+                            Expanded(
+                              child: RawMaterialButton(
+                                onPressed: () {},
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: TextButton.icon(
+                                    onPressed: null,
+                                    style: TextButton.styleFrom(
+                                      disabledForegroundColor: Colors.black87,
+                                      disabledIconColor: Colors.black87,
+                                    ),
+                                    label: const Text('Filter'),
+                                    icon: const Icon(Icons.tune),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Divider(),
+                    ],
+                  ),
                 ),
-                const Divider(),
                 FutureBuilder(
                   future: ReviewService.instance.getReview(widget.product.id),
                   builder: (context, snap) {
@@ -98,65 +142,10 @@ class _ReviewsModalState extends State<ReviewsModal> {
                           return Text(failureOrReviews?.$1 ?? '');
                         } else {
                           final reviews = failureOrReviews?.$2;
-                          return ListView.separated(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: reviews!.length,
-                            separatorBuilder: (context, index) =>
-                                const Divider(),
-                            itemBuilder: (context, index) {
-                              final review = reviews[index];
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    RatingBarIndicator(
-                                      rating: review.rating ?? 0,
-                                      itemBuilder: (context, index) =>
-                                          const Icon(Icons.star,
-                                              color: Colors.amber),
-                                      itemCount: 5,
-                                      itemSize: 25,
-                                    ),
-                                    Text(
-                                      review.heading ?? 'No Title',
-                                      maxLines: 1,
-                                      style: BaseTextStyle.bodyLarge(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      review.review ?? 'No Review',
-                                      maxLines: 3,
-                                      style: BaseTextStyle.bodyMedium(),
-                                    ),
-                                    if (review.imageUrls != null &&
-                                        review.imageUrls!.isNotEmpty)
-                                      SizedBox(
-                                        height: 80,
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: review.imageUrls!.length,
-                                          separatorBuilder: (context, index) =>
-                                              const SizedBox(width: 16),
-                                          itemBuilder: (context, index) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.network(
-                                                review.imageUrls![index],
-                                                width: 80,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              );
-                            },
+
+                          return ReviewWidget(
+                            reviewCount: reviews!.length,
+                            reviews: reviews,
                           );
                         }
                     }

@@ -5,7 +5,10 @@ import 'package:icons_plus/icons_plus.dart';
 
 import '../../../product/widgets/scaffold/app_scaffold_widget.dart';
 import '../models/product_model.dart';
+import '../models/review_model.dart';
+import '../services/review_service.dart';
 import 'reviews_detail.dart';
+import 'reviews_modal.dart';
 import 'write_review_page.dart';
 
 class ProductDetailsView extends StatefulWidget {
@@ -21,7 +24,13 @@ class ProductDetailsView extends StatefulWidget {
 }
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
-  int _currentImageIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    future = ReviewService.instance.getOneReview(widget.product.id);
+  }
+
+  late final Future<(String?, List<ReviewModel>?)> future;
 
   @override
   Widget build(BuildContext context) {
@@ -49,61 +58,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Carousel
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    viewportFraction: 1.0,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _currentImageIndex = index;
-                      });
-                    },
-                  ),
-                  items: widget.product.imageUrls?.map((imageUrl) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(imageUrl ?? ''),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: widget.product.imageUrls
-                            ?.asMap()
-                            .entries
-                            .map((entry) {
-                          return Container(
-                            width: 8.0,
-                            height: 8.0,
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withValues(
-                                alpha:
-                                    _currentImageIndex == entry.key ? 0.9 : 0.4,
-                              ),
-                            ),
-                          );
-                        }).toList() ??
-                        [],
-                  ),
-                ),
-              ],
+            ProductCarouselImageWidget(
+              product: widget.product,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -185,12 +141,188 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 ],
               ),
             ),
-            ReviewsDetail(
-              product: widget.product,
+            FutureBuilder(
+              future: future,
+              builder: (context, snap) {
+                switch (snap.connectionState) {
+                  case ConnectionState.none:
+                    return const SizedBox();
+
+                  case ConnectionState.waiting:
+                    return const PopScope(
+                      canPop: false,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    final failureOrReviews = snap.data;
+
+                    if (failureOrReviews?.$1 != null) {
+                      final failure = failureOrReviews?.$1;
+
+                      return Card(
+                        child: Text(failure ?? ''),
+                      );
+                    } else {
+                      final reviews = failureOrReviews?.$2;
+
+                      final reviewCount = reviews!.length;
+
+                      return Card(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            children: [
+                              ReviewWidget(
+                                reviewCount: reviewCount,
+                                reviews: reviews,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => ReviewsModal(
+                                      product: widget.product,
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    FutureBuilder(
+                                        future: ReviewService.instance
+                                            .getReview(widget.product.id),
+                                        builder: (context, snap) {
+                                          switch (snap.connectionState) {
+                                            case ConnectionState.none:
+                                              return const SizedBox();
+
+                                            case ConnectionState.waiting:
+                                              return const PopScope(
+                                                canPop: false,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              );
+
+                                            case ConnectionState.active:
+                                            case ConnectionState.done:
+                                              final failureOrReviews =
+                                                  snap.data;
+
+                                              if (failureOrReviews?.$1 !=
+                                                  null) {
+                                                final failure =
+                                                    failureOrReviews?.$1;
+
+                                                return Card(
+                                                  child: Text(failure ?? ''),
+                                                );
+                                              } else {
+                                                final reviews =
+                                                    failureOrReviews?.$2;
+                                                return Text(
+                                                  "View All ${reviews?.length} Reviews",
+                                                );
+                                              }
+                                          }
+                                        }),
+                                    const Icon(Icons.arrow_forward_ios)
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                }
+              },
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ProductCarouselImageWidget extends StatefulWidget {
+  const ProductCarouselImageWidget({
+    super.key,
+    required this.product,
+  });
+
+  final ProductModel product;
+
+  @override
+  State<ProductCarouselImageWidget> createState() =>
+      _ProductCarouselImageWidgetState();
+}
+
+class _ProductCarouselImageWidgetState
+    extends State<ProductCarouselImageWidget> {
+  int _currentImageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            height: MediaQuery.of(context).size.height * 0.3,
+            viewportFraction: 1.0,
+            initialPage: _currentImageIndex,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentImageIndex = index;
+              });
+            },
+          ),
+          items: widget.product.imageUrls?.map((imageUrl) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(imageUrl ?? ''),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            );
+          }).toList(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: widget.product.imageUrls?.asMap().entries.map((entry) {
+                  return Container(
+                    width: 8.0,
+                    height: 8.0,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(
+                        alpha: _currentImageIndex == entry.key ? 0.9 : 0.4,
+                      ),
+                    ),
+                  );
+                }).toList() ??
+                [],
+          ),
+        ),
+      ],
     );
   }
 }

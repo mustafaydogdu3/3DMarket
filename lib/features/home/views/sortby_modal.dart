@@ -9,58 +9,48 @@ class SortbyModal extends StatefulWidget {
 }
 
 class _SortbyModalState extends State<SortbyModal> {
-  List<String> sortBy = [
+  List<String> sortByList = [
     'Most Helpful',
     'Most Useful',
     'Highest Rating',
     'Lowest Rating',
     'Recent'
   ];
+
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-        initialChildSize: 0.5,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        builder: (context, scrollController) {
-          return Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(24),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Sort By',
+                style: BaseTextStyle.headlineSmall(
+                    color: Colors.black, fontWeight: FontWeight.bold),
               ),
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.black),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+          ...sortByList.map(
+            (sortBy) => ListTile(
+              title: Text(sortBy),
+              onTap: () => Navigator.pop(context),
             ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Sort By',
-                      style: BaseTextStyle.headlineSmall(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.black),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  controller: scrollController,
-                  itemCount: sortBy.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(sortBy[index]),
-                      onTap: () => Navigator.pop(context),
-                    );
-                  },
-                )
-              ],
-            ),
-          );
-        });
+          )
+        ],
+      ),
+    );
   }
 }
