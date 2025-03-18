@@ -1,9 +1,11 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
 import '../models/product_model.dart';
-import 'reviews_detail.dart';
+import '../services/review_service.dart';
+import 'sortby_modal.dart';
 
 class ReviewsModal extends StatefulWidget {
   const ReviewsModal({super.key, required this.product});
@@ -15,8 +17,6 @@ class ReviewsModal extends StatefulWidget {
 }
 
 class _ReviewsModalState extends State<ReviewsModal> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -56,7 +56,15 @@ class _ReviewsModalState extends State<ReviewsModal> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const SortbyModal(),
+                        );
+                      },
                       label: const Text('Sort By'),
                       icon: const Icon(Icons.sort),
                     ),
@@ -73,10 +81,87 @@ class _ReviewsModalState extends State<ReviewsModal> {
                   ],
                 ),
                 const Divider(),
-                ReviewsDetail(
-                  product: widget.product,
-                  showBotton: false,
-                )
+                FutureBuilder(
+                  future: ReviewService.instance.getReview(widget.product.id),
+                  builder: (context, snap) {
+                    switch (snap.connectionState) {
+                      case ConnectionState.none:
+                        return const SizedBox();
+                      case ConnectionState.waiting:
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        final failureOrReviews = snap.data;
+                        if (failureOrReviews?.$1 != null) {
+                          return Text(failureOrReviews?.$1 ?? '');
+                        } else {
+                          final reviews = failureOrReviews?.$2;
+                          return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: reviews!.length,
+                            separatorBuilder: (context, index) =>
+                                const Divider(),
+                            itemBuilder: (context, index) {
+                              final review = reviews[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RatingBarIndicator(
+                                      rating: review.rating ?? 0,
+                                      itemBuilder: (context, index) =>
+                                          const Icon(Icons.star,
+                                              color: Colors.amber),
+                                      itemCount: 5,
+                                      itemSize: 25,
+                                    ),
+                                    Text(
+                                      review.heading ?? 'No Title',
+                                      maxLines: 1,
+                                      style: BaseTextStyle.bodyLarge(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      review.review ?? 'No Review',
+                                      maxLines: 3,
+                                      style: BaseTextStyle.bodyMedium(),
+                                    ),
+                                    if (review.imageUrls != null &&
+                                        review.imageUrls!.isNotEmpty)
+                                      SizedBox(
+                                        height: 80,
+                                        child: ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: review.imageUrls!.length,
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(width: 16),
+                                          itemBuilder: (context, index) {
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.network(
+                                                review.imageUrls![index],
+                                                width: 80,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                    }
+                  },
+                ),
               ],
             ),
           ),

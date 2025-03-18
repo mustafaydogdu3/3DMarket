@@ -82,4 +82,24 @@ class ReviewService {
       return (e.toString(), null);
     }
   }
+
+  Future<(String?, List<ReviewModel>?)> getOneReview(String? productFK) async {
+    try {
+      final productReviews = await FirebaseFirestore.instance
+          .collection('reviews')
+          .where('productFK', isEqualTo: productFK)
+          .limit(1)
+          .get();
+
+      final reviews = productReviews.docs
+          .map(
+            (e) => ReviewModel.fromJson(e.data()),
+          )
+          .toList();
+
+      return (null, reviews);
+    } catch (e) {
+      return (e.toString(), null);
+    }
+  }
 }

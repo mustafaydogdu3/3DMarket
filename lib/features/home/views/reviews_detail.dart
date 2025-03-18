@@ -24,7 +24,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ReviewService.instance.getReview(widget.product.id),
+      future: ReviewService.instance.getOneReview(widget.product.id),
       builder: (context, snap) {
         switch (snap.connectionState) {
           case ConnectionState.none:
@@ -50,6 +50,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
               );
             } else {
               final reviews = failureOrReviews?.$2;
+
               final reviewCount = reviews!.length;
 
               return ListView.builder(
