@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../product/values/localkeys/app_localkeys.dart';
 import '../models/product_model.dart';
 import '../services/review_service.dart';
+import 'filter_modal.dart';
 import 'reviews_detail.dart';
 import 'sortby_modal.dart';
 
@@ -100,7 +101,13 @@ class _ReviewsModalState extends State<ReviewsModal> {
                             ),
                             Expanded(
                               child: RawMaterialButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => const FilterModal(),
+                                  );
+                                },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),

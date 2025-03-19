@@ -2,7 +2,9 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
 class SortbyModal extends StatefulWidget {
-  const SortbyModal({super.key});
+  const SortbyModal({
+    super.key,
+  });
 
   @override
   State<SortbyModal> createState() => _SortbyModalState();
@@ -16,6 +18,26 @@ class _SortbyModalState extends State<SortbyModal> {
     'Lowest Rating',
     'Recent'
   ];
+  final String text = 'Rating & Reviews';
+
+  @override
+  Widget build(BuildContext context) {
+    return SortByWidget(
+      list: sortByList,
+      text: text,
+    );
+  }
+}
+
+class SortByWidget extends StatelessWidget {
+  const SortByWidget({
+    super.key,
+    required this.list,
+    required this.text,
+  });
+  final String text;
+
+  final List<String> list;
 
   @override
   Widget build(BuildContext context) {
@@ -27,28 +49,32 @@ class _SortbyModalState extends State<SortbyModal> {
           top: Radius.circular(24),
         ),
       ),
-      child: Column(
+      child: Wrap(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
             children: [
-              Text(
-                'Sort By',
-                style: BaseTextStyle.headlineSmall(
-                    color: Colors.black, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    text,
+                    style: BaseTextStyle.headlineSmall(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.black),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
-              IconButton(
-                icon: const Icon(Icons.close, color: Colors.black),
-                onPressed: () => Navigator.pop(context),
-              ),
+              ...list.map(
+                (sortBy) => ListTile(
+                  title: Text(sortBy),
+                  onTap: () => Navigator.pop(context),
+                ),
+              )
             ],
           ),
-          ...sortByList.map(
-            (sortBy) => ListTile(
-              title: Text(sortBy),
-              onTap: () => Navigator.pop(context),
-            ),
-          )
         ],
       ),
     );
