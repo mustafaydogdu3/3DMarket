@@ -3,4 +3,5 @@ class AppPaths {
   static const loginIll = 'assets/images/svg/login_ill.svg';
   static const addressNotFound = 'assets/images/svg/address_not_found.svg';
   static const check = 'assets/images/png/check.png';
+  static const orderNotFound = 'assets/images/svg/order_not_found.svg';
 }

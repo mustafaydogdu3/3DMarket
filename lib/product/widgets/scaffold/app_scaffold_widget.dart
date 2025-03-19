@@ -3,6 +3,7 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
+import '../../../features/home/views/orders.dart';
 import '../drawers/app_drawer.dart';
 
 class AppScaffoldWidget extends StatefulWidget {
@@ -99,7 +100,14 @@ class AppScaffoldWidgetState extends State<AppScaffoldWidget> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Orders(),
+                      ),
+                    );
+                  },
                   icon: Transform.scale(
                     scale: 0.9,
                     alignment: Alignment.topCenter,
