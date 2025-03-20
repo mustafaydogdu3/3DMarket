@@ -28,9 +28,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   void initState() {
     super.initState();
     future = ReviewService.instance.getOneReview(widget.product.id);
+    averageRatingFuture =
+        ReviewService.instance.getAverageRating(widget.product.id)
+            as Future<(String?, List<ReviewModel>?)>;
   }
 
   late final Future<(String?, List<ReviewModel>?)> future;
+  late final Future<(String?, List<ReviewModel>?)> averageRatingFuture;
 
   @override
   Widget build(BuildContext context) {

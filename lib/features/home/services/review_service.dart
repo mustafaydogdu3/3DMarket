@@ -102,4 +102,28 @@ class ReviewService {
       return (e.toString(), null);
     }
   }
+
+  Future<(String?, double?)> getAverageRating(String? productFK) async {
+    try {
+      final productReviews = await FirebaseFirestore.instance
+          .collection('reviews')
+          .where('productFK', isEqualTo: productFK)
+          .get();
+
+      final reviews = productReviews.docs
+          .map(
+            (e) => ReviewModel.fromJson(e.data()),
+          )
+          .toList();
+
+      double totalRating = 0;
+      for (var review in reviews) {
+        totalRating += review.rating!;
+      }
+      double average = totalRating / reviews.length;
+      return (null, average);
+    } catch (e) {
+      return (e.toString(), null);
+    }
+  }
 }
