@@ -3,9 +3,10 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
+import '../../../product/values/colors/app_colors.dart';
 import '../../../product/widgets/scaffold/app_scaffold_widget.dart';
+import '../../profile/views/addresses_view.dart';
 import '../models/product_model.dart';
-import '../models/review_model.dart';
 import '../services/review_service.dart';
 import 'reviews_detail.dart';
 import 'reviews_modal.dart';
@@ -24,18 +25,6 @@ class ProductDetailsView extends StatefulWidget {
 }
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
-  @override
-  void initState() {
-    super.initState();
-    future = ReviewService.instance.getOneReview(widget.product.id);
-    averageRatingFuture =
-        ReviewService.instance.getAverageRating(widget.product.id)
-            as Future<(String?, List<ReviewModel>?)>;
-  }
-
-  late final Future<(String?, List<ReviewModel>?)> future;
-  late final Future<(String?, List<ReviewModel>?)> averageRatingFuture;
-
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWidget(
@@ -145,110 +134,218 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 ],
               ),
             ),
-            FutureBuilder(
-              future: future,
-              builder: (context, snap) {
-                switch (snap.connectionState) {
-                  case ConnectionState.none:
-                    return const SizedBox();
+            Card(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Rating & Reviews',
+                      style: BaseTextStyle.bodyLarge(),
+                    ),
+                    const Divider(),
+                    FutureBuilder(
+                      future:
+                          ReviewService.instance.getReviews(widget.product.id),
+                      builder: (context, snap) {
+                        switch (snap.connectionState) {
+                          case ConnectionState.none:
+                            return const SizedBox();
 
-                  case ConnectionState.waiting:
-                    return const PopScope(
-                      canPop: false,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    final failureOrReviews = snap.data;
-
-                    if (failureOrReviews?.$1 != null) {
-                      final failure = failureOrReviews?.$1;
-
-                      return Card(
-                        child: Text(failure ?? ''),
-                      );
-                    } else {
-                      final reviews = failureOrReviews?.$2;
-
-                      final reviewCount = reviews!.length;
-
-                      return Card(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            children: [
-                              ReviewWidget(
-                                reviewCount: reviewCount,
-                                reviews: reviews,
+                          case ConnectionState.waiting:
+                            return const PopScope(
+                              canPop: false,
+                              child: Center(
+                                child: CircularProgressIndicator(),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context) => ReviewsModal(
-                                      product: widget.product,
+                            );
+
+                          case ConnectionState.active:
+                          case ConnectionState.done:
+                            final failureOrReviews = snap.data;
+
+                            if (failureOrReviews?.$1 != null) {
+                              final failure = failureOrReviews?.$1;
+
+                              return Card(
+                                child: Text(failure ?? ''),
+                              );
+                            } else {
+                              final reviews = failureOrReviews?.$2;
+
+                              if (reviews != null && reviews.isNotEmpty) {
+                                final reviewCount = reviews.length;
+
+                                final totalRating = reviews
+                                    .map(
+                                      (review) => review.rating,
+                                    )
+                                    .reduce(
+                                      (value, element) => value! + element!,
+                                    );
+
+                                final avgRating = totalRating! / reviewCount;
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                            vertical: 24,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                spacing: 16,
+                                                children: [
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: avgRating
+                                                              .toString(),
+                                                          style: BaseTextStyle
+                                                              .headlineLarge(),
+                                                        ),
+                                                        TextSpan(
+                                                          text: '/5',
+                                                          style: BaseTextStyle
+                                                              .headlineLarge(
+                                                                  color: Colors
+                                                                      .grey),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Overall Rating',
+                                                        style: BaseTextStyle
+                                                            .titleLarge(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '$reviewCount Ratings',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              BorderedButtonWidget(
+                                                onPressed: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WriteReviewPage(
+                                                      product: widget.product,
+                                                    ),
+                                                  ),
+                                                ).then(
+                                                  (value) => setState(() {}),
+                                                ),
+                                                child: Text(
+                                                  'Rate',
+                                                  style:
+                                                      BaseTextStyle.labelLarge(
+                                                    color: AppColors.background,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        ReviewWidget(
+                                          reviews: [reviews.first],
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              builder: (context) =>
+                                                  ReviewsModal(
+                                                reviews: reviews,
+                                              ),
+                                            );
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "View All ${reviews.length} Reviews",
+                                              ),
+                                              const Icon(
+                                                Icons.arrow_forward_ios,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                },
-                                child: Row(
+                                  ],
+                                );
+                              } else {
+                                return Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    FutureBuilder(
-                                        future: ReviewService.instance
-                                            .getReview(widget.product.id),
-                                        builder: (context, snap) {
-                                          switch (snap.connectionState) {
-                                            case ConnectionState.none:
-                                              return const SizedBox();
-
-                                            case ConnectionState.waiting:
-                                              return const PopScope(
-                                                canPop: false,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              );
-
-                                            case ConnectionState.active:
-                                            case ConnectionState.done:
-                                              final failureOrReviews =
-                                                  snap.data;
-
-                                              if (failureOrReviews?.$1 !=
-                                                  null) {
-                                                final failure =
-                                                    failureOrReviews?.$1;
-
-                                                return Card(
-                                                  child: Text(failure ?? ''),
-                                                );
-                                              } else {
-                                                final reviews =
-                                                    failureOrReviews?.$2;
-                                                return Text(
-                                                  "View All ${reviews?.length} Reviews",
-                                                );
-                                              }
-                                          }
-                                        }),
-                                    const Icon(Icons.arrow_forward_ios)
+                                    Row(
+                                      spacing: 4,
+                                      children: [
+                                        const Icon(
+                                          Icons.star_border_rounded,
+                                          size: 32,
+                                        ),
+                                        Text(
+                                          'You are the first to add rating.',
+                                          style: BaseTextStyle.bodyMedium(
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    BorderedButtonWidget(
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WriteReviewPage(
+                                            product: widget.product,
+                                          ),
+                                        ),
+                                      ).then(
+                                        (value) => setState(() {}),
+                                      ),
+                                      child: Text(
+                                        'Rate',
+                                        style: BaseTextStyle.labelLarge(
+                                          color: AppColors.background,
+                                        ),
+                                      ),
+                                    )
                                   ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                }
-              },
+                                );
+                              }
+                            }
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

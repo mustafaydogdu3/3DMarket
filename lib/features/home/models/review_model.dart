@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class ReviewModel extends Equatable {
@@ -10,6 +11,7 @@ class ReviewModel extends Equatable {
     required this.review,
     required this.rating,
     this.imageUrls,
+    this.createTime,
   });
 
   final String? id;
@@ -19,6 +21,7 @@ class ReviewModel extends Equatable {
   final String? review;
   final double? rating;
   final List<String>? imageUrls;
+  final DateTime? createTime;
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
@@ -29,6 +32,9 @@ class ReviewModel extends Equatable {
       review: json['review'],
       rating: (json['rating'] as num).toDouble(),
       imageUrls: List<String>.from(json['imageUrls']),
+      createTime: json['createTime'] != null
+          ? (json['createTime'] as Timestamp).toDate()
+          : null,
     );
   }
 
@@ -42,6 +48,7 @@ class ReviewModel extends Equatable {
     data['review'] = review;
     data['rating'] = rating;
     data['imageUrls'] = imageUrls;
+    data['createTime'] = FieldValue.serverTimestamp();
 
     return data;
   }
@@ -54,6 +61,7 @@ class ReviewModel extends Equatable {
     String? review,
     double? rating,
     List<String>? imageUrls,
+    DateTime? createTime,
   }) {
     return ReviewModel(
       id: id ?? this.id,
@@ -63,6 +71,7 @@ class ReviewModel extends Equatable {
       review: review ?? this.review,
       rating: rating ?? this.rating,
       imageUrls: imageUrls ?? this.imageUrls,
+      createTime: createTime ?? this.createTime,
     );
   }
 
@@ -75,5 +84,6 @@ class ReviewModel extends Equatable {
         review,
         rating,
         imageUrls,
+        createTime,
       ];
 }

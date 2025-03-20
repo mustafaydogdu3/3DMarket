@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 
+import '../../../product/values/colors/app_colors.dart';
 import '../../../product/values/paths/app_paths.dart';
 import '../models/address_model.dart';
 import '../services/profile_service.dart';
@@ -28,7 +29,7 @@ class _AddressesViewState extends State<AddressesView> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+            child: BorderedButtonWidget(
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -36,16 +37,6 @@ class _AddressesViewState extends State<AddressesView> {
                 ),
               ).then(
                 (_) => setState(() {}),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                side: const BorderSide(
-                  color: Colors.blue,
-                  width: 1.5,
-                ),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
@@ -378,6 +369,34 @@ class _AddressesViewState extends State<AddressesView> {
           }
         },
       ),
+    );
+  }
+}
+
+class BorderedButtonWidget extends StatelessWidget {
+  const BorderedButtonWidget({
+    super.key,
+    required this.onPressed,
+    required this.child,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        side: const BorderSide(
+          color: AppColors.background,
+          width: 1.5,
+        ),
+      ),
+      child: child,
     );
   }
 }

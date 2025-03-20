@@ -1,19 +1,16 @@
-import 'dart:ui';
-
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../product/values/localkeys/app_localkeys.dart';
-import '../models/product_model.dart';
-import '../services/review_service.dart';
+import '../models/review_model.dart';
 import 'filter_modal.dart';
 import 'reviews_detail.dart';
 import 'sortby_modal.dart';
 
 class ReviewsModal extends StatefulWidget {
-  const ReviewsModal({super.key, required this.product});
+  const ReviewsModal({super.key, required this.reviews});
 
-  final ProductModel product;
+  final List<ReviewModel> reviews;
 
   @override
   State<ReviewsModal> createState() => _ReviewsModalState();
@@ -23,10 +20,10 @@ class _ReviewsModalState extends State<ReviewsModal> {
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height +
-        window.viewPadding.top +
+        View.of(context).viewPadding.top +
         kToolbarHeight;
 
-    final statusBarHeight = window.viewPadding.top / 2;
+    final statusBarHeight = View.of(context).viewPadding.top / 2;
 
     final statusBarPercentange = (statusBarHeight * 100 / deviceHeight) / 100;
 
@@ -132,32 +129,9 @@ class _ReviewsModalState extends State<ReviewsModal> {
                     ],
                   ),
                 ),
-                FutureBuilder(
-                  future: ReviewService.instance.getReview(widget.product.id),
-                  builder: (context, snap) {
-                    switch (snap.connectionState) {
-                      case ConnectionState.none:
-                        return const SizedBox();
-                      case ConnectionState.waiting:
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      case ConnectionState.active:
-                      case ConnectionState.done:
-                        final failureOrReviews = snap.data;
-                        if (failureOrReviews?.$1 != null) {
-                          return Text(failureOrReviews?.$1 ?? '');
-                        } else {
-                          final reviews = failureOrReviews?.$2;
-
-                          return ReviewWidget(
-                            reviewCount: reviews!.length,
-                            reviews: reviews,
-                          );
-                        }
-                    }
-                  },
-                ),
+                ReviewWidget(
+                  reviews: widget.reviews,
+                )
               ],
             ),
           ),

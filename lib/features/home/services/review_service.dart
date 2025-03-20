@@ -64,64 +64,24 @@ class ReviewService {
     }
   }
 
-  Future<(String?, List<ReviewModel>?)> getReview(String? productFK) async {
+  Future<(String?, List<ReviewModel>?)> getReviews(String? productFK) async {
     try {
-      final productReviews = await FirebaseFirestore.instance
+      final productReviewsSnap = await FirebaseFirestore.instance
           .collection('reviews')
           .where('productFK', isEqualTo: productFK)
           .get();
 
-      final reviews = productReviews.docs
+      final reviews = productReviewsSnap.docs
           .map(
             (e) => ReviewModel.fromJson(e.data()),
           )
           .toList();
+
+      reviews.sort(
+        (a, b) => a.createTime!.compareTo(b.createTime!),
+      );
 
       return (null, reviews);
-    } catch (e) {
-      return (e.toString(), null);
-    }
-  }
-
-  Future<(String?, List<ReviewModel>?)> getOneReview(String? productFK) async {
-    try {
-      final productReviews = await FirebaseFirestore.instance
-          .collection('reviews')
-          .where('productFK', isEqualTo: productFK)
-          .limit(1)
-          .get();
-
-      final reviews = productReviews.docs
-          .map(
-            (e) => ReviewModel.fromJson(e.data()),
-          )
-          .toList();
-
-      return (null, reviews);
-    } catch (e) {
-      return (e.toString(), null);
-    }
-  }
-
-  Future<(String?, double?)> getAverageRating(String? productFK) async {
-    try {
-      final productReviews = await FirebaseFirestore.instance
-          .collection('reviews')
-          .where('productFK', isEqualTo: productFK)
-          .get();
-
-      final reviews = productReviews.docs
-          .map(
-            (e) => ReviewModel.fromJson(e.data()),
-          )
-          .toList();
-
-      double totalRating = 0;
-      for (var review in reviews) {
-        totalRating += review.rating!;
-      }
-      double average = totalRating / reviews.length;
-      return (null, average);
     } catch (e) {
       return (e.toString(), null);
     }

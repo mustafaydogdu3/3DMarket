@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../models/review_model.dart';
-import '../services/review_service.dart';
 
 class ReviewWidget extends StatelessWidget {
   const ReviewWidget({
     super.key,
-    required this.reviewCount,
     required this.reviews,
   });
 
-  final int reviewCount;
   final List<ReviewModel> reviews;
 
   @override
@@ -21,16 +18,10 @@ class ReviewWidget extends StatelessWidget {
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Rating & Reviews',
-          style: BaseTextStyle.bodyLarge(),
-        ),
-        FutureBuilder(future: ReviewService.instance.getAverageRating(), builder: builder)
-        const Divider(),
         ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: reviewCount,
+          itemCount: reviews.length,
           separatorBuilder: (context, index) => Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Divider(

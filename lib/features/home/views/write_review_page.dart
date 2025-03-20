@@ -105,7 +105,7 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                             const EdgeInsets.symmetric(horizontal: 4.0),
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
-                          color: Colors.amber,
+                          color: Color(0xFFf59e0b),
                         ),
                         onRatingUpdate: (rating) {
                           setState(() {
