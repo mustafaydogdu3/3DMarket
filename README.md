@@ -52,3 +52,5 @@ Either Type dartz kütüphanesi
 
 ... (üç nokta yan yana)
  ui içerisinde işlem yapıp widget dönebilmeni sağlar
+
+Callback metot

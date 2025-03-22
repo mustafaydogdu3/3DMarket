@@ -17,13 +17,15 @@ class ReviewsModal extends StatefulWidget {
 }
 
 class _ReviewsModalState extends State<ReviewsModal> {
-  int? selectedRating;
+  String filter = '';
+
   @override
   Widget build(BuildContext context) {
-    List<ReviewModel> filteredReviews = selectedRating != null
-        ? widget.reviews
-            .where((review) => review.rating == selectedRating)
-            .toList()
+    List<ReviewModel> filteredReviews = filter.isNotEmpty
+        ? widget.reviews.where((review) {
+            final where = review.rating == double.tryParse(filter);
+            return where;
+          }).toList()
         : widget.reviews;
 
     final deviceHeight = MediaQuery.of(context).size.height +
@@ -105,19 +107,21 @@ class _ReviewsModalState extends State<ReviewsModal> {
                             ),
                             Expanded(
                               child: RawMaterialButton(
-                                onPressed: () async {
-                                  final selected =
-                                      await showModalBottomSheet<int?>(
+                                onPressed: () {
+                                  showModalBottomSheet(
                                     context: context,
                                     backgroundColor: Colors.transparent,
-                                    builder: (context) => const FilterModal(),
-                                  );
+                                    builder: (context) => FilterModal(
+                                      onSelect: (selectedFilter) {
+                                        if (selectedFilter != null &&
+                                            selectedFilter.isNotEmpty) {
+                                          filter = selectedFilter.split(' ')[0];
+                                        }
 
-                                  if (selected != null) {
-                                    setState(() {
-                                      selectedRating = selected;
-                                    });
-                                  }
+                                        setState(() {});
+                                      },
+                                    ),
+                                  );
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
