@@ -17,8 +17,15 @@ class ReviewsModal extends StatefulWidget {
 }
 
 class _ReviewsModalState extends State<ReviewsModal> {
+  int? selectedRating;
   @override
   Widget build(BuildContext context) {
+    List<ReviewModel> filteredReviews = selectedRating != null
+        ? widget.reviews
+            .where((review) => review.rating == selectedRating)
+            .toList()
+        : widget.reviews;
+
     final deviceHeight = MediaQuery.of(context).size.height +
         View.of(context).viewPadding.top +
         kToolbarHeight;
@@ -98,12 +105,19 @@ class _ReviewsModalState extends State<ReviewsModal> {
                             ),
                             Expanded(
                               child: RawMaterialButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
+                                onPressed: () async {
+                                  final selected =
+                                      await showModalBottomSheet<int?>(
                                     context: context,
                                     backgroundColor: Colors.transparent,
                                     builder: (context) => const FilterModal(),
                                   );
+
+                                  if (selected != null) {
+                                    setState(() {
+                                      selectedRating = selected;
+                                    });
+                                  }
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -130,7 +144,7 @@ class _ReviewsModalState extends State<ReviewsModal> {
                   ),
                 ),
                 ReviewWidget(
-                  reviews: widget.reviews,
+                  reviews: filteredReviews,
                 )
               ],
             ),

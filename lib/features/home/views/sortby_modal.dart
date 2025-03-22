@@ -34,10 +34,13 @@ class SortByWidget extends StatelessWidget {
     super.key,
     required this.list,
     required this.text,
+    this.onSelect,
   });
   final String text;
 
   final List<String> list;
+
+  final Function(String?)? onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +73,14 @@ class SortByWidget extends StatelessWidget {
               ...list.map(
                 (sortBy) => ListTile(
                   title: Text(sortBy),
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    if (onSelect != null) {
+                      onSelect!(sortBy);
+                    }
+                    Navigator.pop(context);
+                  },
                 ),
-              )
+              ),
             ],
           ),
         ],

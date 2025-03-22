@@ -25,6 +25,9 @@ class _FilterModalState extends State<FilterModal> {
     return SortByWidget(
       list: filterList,
       text: text,
+      onSelect: (selectedValue) {
+        Navigator.pop(context, selectedValue);
+      },
     );
   }
 }
