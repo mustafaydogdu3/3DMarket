@@ -2,15 +2,18 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../profile/services/profile_service.dart';
 import '../models/review_model.dart';
 
 class ReviewWidget extends StatelessWidget {
   const ReviewWidget({
     super.key,
     required this.reviews,
+    this.profileService,
   });
 
   final List<ReviewModel> reviews;
+  final ProfileService? profileService;
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +66,36 @@ class ReviewWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 80,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: review.imageUrls?.length ?? 0,
-                    separatorBuilder: (context, index) => const SizedBox(
-                      width: 16,
+                if (review.imageUrls != null && review.imageUrls!.isNotEmpty)
+                  SizedBox(
+                    height: 80,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: review.imageUrls?.length ?? 0,
+                      separatorBuilder: (context, index) => const SizedBox(
+                        width: 16,
+                      ),
+                      itemBuilder: (context, index) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            review.imageUrls?[index] ?? '',
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
                     ),
-                    itemBuilder: (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          review.imageUrls?[index] ?? '',
-                          width: 80,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
+                  ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        review.createTime?.toString() ?? 'No Time',
+                      ),
+                    ],
                   ),
                 ),
               ],

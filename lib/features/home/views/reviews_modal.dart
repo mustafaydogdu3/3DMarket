@@ -113,7 +113,9 @@ class _ReviewsModalState extends State<ReviewsModal> {
                                     backgroundColor: Colors.transparent,
                                     builder: (context) => FilterModal(
                                       onSelect: (selectedFilter) {
-                                        if (selectedFilter != null &&
+                                        if (selectedFilter == 'All Star') {
+                                          filter = '';
+                                        } else if (selectedFilter != null &&
                                             selectedFilter.isNotEmpty) {
                                           filter = selectedFilter.split(' ')[0];
                                         }

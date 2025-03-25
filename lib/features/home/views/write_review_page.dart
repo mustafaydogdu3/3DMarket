@@ -99,7 +99,7 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                         initialRating: _rating,
                         minRating: 1,
                         direction: Axis.horizontal,
-                        allowHalfRating: true,
+                        allowHalfRating: false,
                         itemCount: 5,
                         itemPadding:
                             const EdgeInsets.symmetric(horizontal: 4.0),

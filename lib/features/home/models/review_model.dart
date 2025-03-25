@@ -31,7 +31,8 @@ class ReviewModel extends Equatable {
       heading: json['heading'],
       review: json['review'],
       rating: (json['rating'] as num).toDouble(),
-      imageUrls: List<String>.from(json['imageUrls']),
+      imageUrls:
+          json['imageUrls'] != null ? List<String>.from(json['imageUrls']) : [],
       createTime: json['createTime'] != null
           ? (json['createTime'] as Timestamp).toDate()
           : null,
