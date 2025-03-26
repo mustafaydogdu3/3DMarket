@@ -2,13 +2,11 @@ import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../product/validators/validator.dart';
-import '../../../product/values/colors/app_colors.dart';
 import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../../product/values/paths/app_paths.dart';
 import '../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../product/widgets/done_show_modal.dart';
 import '../models/address_model.dart';
 import '../services/profile_service.dart';
-import 'addresses_view.dart';
 
 class AddAddressView extends StatefulWidget {
   const AddAddressView({
@@ -171,56 +169,17 @@ class _AddAddressViewState extends State<AddAddressView> {
                       Navigator.pop(context);
 
                       showModalBottomSheet(
-                        context: AddressesView.scaffoldState.currentContext!,
+                        context: context,
+                        isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(24),
-                          ),
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(24)),
                         ),
-                        builder: (context) => Container(
-                          padding: const EdgeInsets.all(24),
-                          width: double.maxFinite,
-                          child: Wrap(
-                            alignment: WrapAlignment.center,
-                            runSpacing: 24,
-                            children: [
-                              Image.asset(AppPaths.check),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.edit
-                                        ? 'Address updated\nsuccessfully!'
-                                        : 'Address added\nsuccessfully!',
-                                    textAlign: TextAlign.center,
-                                    style: BaseTextStyle.headlineSmall(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.background,
-                                        foregroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Done',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
+                        builder: (context) => DoneShowModal(
+                          title: widget.edit
+                              ? 'Address Updated Successfully'
+                              : 'Address Added Successfully',
+                          confirmButtonText: 'Done',
                         ),
                       );
                     } catch (e) {

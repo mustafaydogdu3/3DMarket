@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../product/validators/validator.dart';
 import '../../../product/widgets/buttons/primary_button_widget.dart';
+import '../../../product/widgets/done_show_modal.dart';
 import '../models/product_model.dart';
 import '../models/review_model.dart';
 import '../services/review_service.dart';
@@ -249,7 +250,7 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                 review,
                 _images,
               );
-
+              if (!mounted) return;
               Navigator.pop(context);
 
               if (failureOrSuccess.$1 != null) {
@@ -259,7 +260,18 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
                   SnackBar(content: Text('Error: $error')),
                 );
               } else {
-                Navigator.pop(context);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  builder: (context) => const DoneShowModal(
+                    title: 'Review Submitted Successfully',
+                    confirmButtonText: 'Done',
+                  ),
+                );
               }
             }
           },
