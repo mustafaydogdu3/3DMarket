@@ -208,7 +208,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                                       children: [
                                                         TextSpan(
                                                           text: avgRating
-                                                              .toString(),
+                                                              .toStringAsFixed(
+                                                                  1),
                                                           style: BaseTextStyle
                                                               .headlineLarge(),
                                                         ),

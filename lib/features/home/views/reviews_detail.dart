@@ -1,6 +1,7 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 
 import '../../profile/services/profile_service.dart';
 import '../models/review_model.dart';
@@ -92,9 +93,9 @@ class ReviewWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        review.createTime?.toString() ?? 'No Time',
-                      ),
+                      Text(review.createTime != null
+                          ? DateFormat('d MMMM yyyy').format(review.createTime!)
+                          : 'No Time'),
                     ],
                   ),
                 ),
