@@ -93,8 +93,10 @@ class ReviewWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      Text(review.user?.name ?? 'Unknow'),
                       Text(review.createTime != null
-                          ? DateFormat('d MMMM yyyy').format(review.createTime!)
+                          ? DateFormat(', d MMMM yyyy')
+                              .format(review.createTime!)
                           : 'No Time'),
                     ],
                   ),

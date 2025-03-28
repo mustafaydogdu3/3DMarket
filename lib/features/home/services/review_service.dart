@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../../auth/models/user/user_model.dart';
 import '../models/review_model.dart';
 
 class ReviewService {
@@ -18,8 +19,24 @@ class ReviewService {
     try {
       final userFK = FirebaseAuth.instance.currentUser?.uid;
 
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+
       review = review.copyWith(
         userFK: userFK,
+      );
+
+      final userModel = UserModel(
+        id: firebaseUser?.uid ?? '',
+        name: firebaseUser?.displayName ?? '',
+        email: firebaseUser?.email ?? '',
+        phoneNumber: firebaseUser?.phoneNumber ?? '',
+        photoUrl: firebaseUser?.photoURL ?? '',
+        gender: '',
+      );
+
+      review = review.copyWith(
+        userFK: userFK,
+        user: userModel,
       );
 
       if (images.isNotEmpty) {

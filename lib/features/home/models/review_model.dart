@@ -2,10 +2,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../auth/models/user/user_model.dart';
+
 class ReviewModel extends Equatable {
   const ReviewModel({
     required this.id,
     required this.productFK,
+    this.user,
     this.userFK,
     required this.heading,
     required this.review,
@@ -17,6 +20,8 @@ class ReviewModel extends Equatable {
   final String? id;
   final String? productFK;
   final String? userFK;
+  final UserModel? user;
+
   final String? heading;
   final String? review;
   final double? rating;
@@ -28,6 +33,7 @@ class ReviewModel extends Equatable {
       id: json['id'],
       productFK: json['productFK'],
       userFK: json['userFK'],
+      user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
       heading: json['heading'],
       review: json['review'],
       rating: (json['rating'] as num).toDouble(),
@@ -46,6 +52,7 @@ class ReviewModel extends Equatable {
     data['productFK'] = productFK;
     data['userFK'] = userFK;
     data['heading'] = heading;
+    data['user'] = user?.toJson();
     data['review'] = review;
     data['rating'] = rating;
     data['imageUrls'] = imageUrls;
@@ -59,6 +66,7 @@ class ReviewModel extends Equatable {
     String? productFK,
     String? userFK,
     String? heading,
+    UserModel? user,
     String? review,
     double? rating,
     List<String>? imageUrls,
@@ -70,6 +78,7 @@ class ReviewModel extends Equatable {
       userFK: userFK ?? this.userFK,
       heading: heading ?? this.heading,
       review: review ?? this.review,
+      user: user ?? this.user,
       rating: rating ?? this.rating,
       imageUrls: imageUrls ?? this.imageUrls,
       createTime: createTime ?? this.createTime,
@@ -82,6 +91,7 @@ class ReviewModel extends Equatable {
         productFK,
         userFK,
         heading,
+        user,
         review,
         rating,
         imageUrls,
