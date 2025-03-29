@@ -1,15 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../../product/values/paths/app_paths.dart';
+import '../../../core/router/app_route_enum.dart';
+import '../../../core/router/app_router.gr.dart';
+import '../../../core/values/localkeys/app_localkeys.dart';
+import '../../../core/values/paths/app_paths.dart';
 import '../services/profile_service.dart';
-import 'add_addresses_view.dart';
-import 'addresses_view.dart';
-import 'edit_profile_view.dart';
+import 'widgets/profile_fields_widget.dart';
 
+@RoutePage()
 class MyProfileView extends StatefulWidget {
   const MyProfileView({super.key});
 
@@ -49,19 +51,18 @@ class _MyProfileViewState extends State<MyProfileView> {
                 title: const Text(AppLocalkeys.myProfile),
                 actions: [
                   ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfileView(
-                          email: user?.email ?? '',
-                          gender: user?.gender ?? '',
-                          name: user?.name ?? '',
-                          phone: user?.phoneNumber ?? '',
+                    onPressed: () => context.router
+                        .push(
+                          EditProfileRoute(
+                            email: user?.email ?? '',
+                            gender: user?.gender ?? '',
+                            name: user?.name ?? '',
+                            phone: user?.phoneNumber ?? '',
+                          ),
+                        )
+                        .then(
+                          (_) => setState(() {}),
                         ),
-                      ),
-                    ).then(
-                      (_) => setState(() {}),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -163,15 +164,11 @@ class _MyProfileViewState extends State<MyProfileView> {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AddressesView(),
-                                        ),
-                                      ).then(
-                                        (_) => setState(() {}),
-                                      ),
+                                      onPressed: () => context.router
+                                          .pushPath(AppRoute.addresses.path)
+                                          .then(
+                                            (_) => setState(() {}),
+                                          ),
                                       child: Row(
                                         spacing: 8,
                                         children: [
@@ -218,39 +215,38 @@ class _MyProfileViewState extends State<MyProfileView> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AddAddressView(
-                                                        id: defaultAddress.id,
-                                                        userFK: defaultAddress
-                                                            .userFK,
-                                                        title: defaultAddress
-                                                            .title,
-                                                        name:
-                                                            defaultAddress.name,
-                                                        phone: defaultAddress
-                                                            .phoneNumber,
-                                                        streetDetails:
-                                                            defaultAddress
-                                                                .streetDetails,
-                                                        zipcode: defaultAddress
-                                                            .zipcode,
-                                                        state: defaultAddress
-                                                            .state,
-                                                        city:
-                                                            defaultAddress.city,
-                                                        isDefault:
-                                                            defaultAddress
-                                                                .isDefault,
-                                                        edit: true,
+                                                  onPressed: () => context
+                                                      .router
+                                                      .push(
+                                                        AddAddressesRoute(
+                                                          id: defaultAddress.id,
+                                                          userFK: defaultAddress
+                                                              .userFK,
+                                                          title: defaultAddress
+                                                              .title,
+                                                          name: defaultAddress
+                                                              .name,
+                                                          phone: defaultAddress
+                                                              .phoneNumber,
+                                                          streetDetails:
+                                                              defaultAddress
+                                                                  .streetDetails,
+                                                          zipcode:
+                                                              defaultAddress
+                                                                  .zipcode,
+                                                          state: defaultAddress
+                                                              .state,
+                                                          city: defaultAddress
+                                                              .city,
+                                                          isDefault:
+                                                              defaultAddress
+                                                                  .isDefault,
+                                                          edit: true,
+                                                        ),
+                                                      )
+                                                      .then(
+                                                        (_) => setState(() {}),
                                                       ),
-                                                    ),
-                                                  ).then(
-                                                    (_) => setState(() {}),
-                                                  ),
                                                   child: Row(
                                                     spacing: 8,
                                                     children: [
@@ -325,15 +321,13 @@ class _MyProfileViewState extends State<MyProfileView> {
                                                 ),
                                                 ElevatedButton(
                                                   onPressed: () async {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const AddAddressView(),
-                                                      ),
-                                                    ).then(
-                                                      (_) => setState(() {}),
-                                                    );
+                                                    context.router
+                                                        .pushPath(AppRoute
+                                                            .addAddresses.path)
+                                                        .then(
+                                                          (_) =>
+                                                              setState(() {}),
+                                                        );
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -394,40 +388,6 @@ class _MyProfileViewState extends State<MyProfileView> {
             );
         }
       },
-    );
-  }
-}
-
-class ProfileFieldsWidget extends StatelessWidget {
-  const ProfileFieldsWidget({
-    super.key,
-    required this.title,
-    required this.name,
-  });
-
-  final String title;
-  final String name;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        width: double.maxFinite,
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: BaseTextStyle.labelSmall(),
-            ),
-            Text(
-              name,
-              style: BaseTextStyle.bodyLarge(),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

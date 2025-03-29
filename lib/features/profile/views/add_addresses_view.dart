@@ -1,15 +1,17 @@
-import 'package:core/base/text/style/base_text_style.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../../product/validators/validator.dart';
-import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../../product/widgets/done_show_modal.dart';
+import '../../../core/validators/validator.dart';
+import '../../../core/values/localkeys/app_localkeys.dart';
+import '../../../core/widgets/buttons/primary_button_widget.dart';
+import '../../../core/widgets/done_show_modal.dart';
+import '../../../core/widgets/textfields/text_form_field_widget.dart';
 import '../models/address_model.dart';
 import '../services/profile_service.dart';
 
-class AddAddressView extends StatefulWidget {
-  const AddAddressView({
+@RoutePage()
+class AddAddressesView extends StatefulWidget {
+  const AddAddressesView({
     super.key,
     this.id,
     this.userFK,
@@ -37,10 +39,10 @@ class AddAddressView extends StatefulWidget {
   final bool edit;
 
   @override
-  State<AddAddressView> createState() => _AddAddressViewState();
+  State<AddAddressesView> createState() => _AddAddressesViewState();
 }
 
-class _AddAddressViewState extends State<AddAddressView> {
+class _AddAddressesViewState extends State<AddAddressesView> {
   @override
   void initState() {
     super.initState();
@@ -80,44 +82,44 @@ class _AddAddressViewState extends State<AddAddressView> {
           child: Column(
             spacing: 10,
             children: [
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: Validator.stringInput,
                 controller: titleController,
                 labelText: AppLocalkeys.addressTitle,
                 keyboardType: TextInputType.name,
               ),
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: Validator.stringInput,
                 controller: nameController,
                 labelText: AppLocalkeys.name,
                 keyboardType: TextInputType.name,
               ),
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: (value) => Validator.phone(value),
                 keyboardType: TextInputType.phone,
                 controller: phoneController,
                 labelText: AppLocalkeys.mobileNumber,
               ),
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: (value) => Validator.stringInput(value),
                 keyboardType: TextInputType.streetAddress,
                 controller: streetController,
                 maxLines: 2,
                 labelText: AppLocalkeys.streetDetail,
               ),
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: (value) => Validator.zipCode(value),
                 keyboardType: TextInputType.number,
                 controller: zipcodeController,
                 labelText: AppLocalkeys.zipcode,
               ),
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: (value) => Validator.stringInput(value),
                 keyboardType: TextInputType.text,
                 controller: stateController,
                 labelText: AppLocalkeys.state,
               ),
-              AppTextFormField(
+              TextFormFieldWidget(
                 validator: (value) => Validator.stringInput(value),
                 keyboardType: TextInputType.text,
                 controller: cityController,
@@ -166,7 +168,7 @@ class _AddAddressViewState extends State<AddAddressView> {
 
                       if (!context.mounted) return;
 
-                      Navigator.pop(context);
+                      context.router.pop();
 
                       showModalBottomSheet(
                         context: context,
@@ -194,42 +196,6 @@ class _AddAddressViewState extends State<AddAddressView> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AppTextFormField extends StatelessWidget {
-  const AppTextFormField({
-    super.key,
-    this.validator,
-    required this.controller,
-    this.keyboardType,
-    required this.labelText,
-    this.maxLines,
-  });
-
-  final String? Function(String?)? validator;
-  final TextEditingController? controller;
-  final TextInputType? keyboardType;
-  final String? labelText;
-  final int? maxLines;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: validator,
-      keyboardType: keyboardType,
-      controller: controller,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-        labelStyle: BaseTextStyle.bodyMedium(),
-        labelText: labelText,
       ),
     );
   }

@@ -54,3 +54,6 @@ Either Type dartz kütüphanesi
  ui içerisinde işlem yapıp widget dönebilmeni sağlar
 
 Callback metot
+
+MVVM: Model, View, ViewModel (state management, logic)
+Feature Base: - Feature ve Sub Feature olarak klasörleme

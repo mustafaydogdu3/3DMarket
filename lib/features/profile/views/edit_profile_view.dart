@@ -1,11 +1,13 @@
+import 'package:auto_route/annotations.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../../product/values/localkeys/app_localkeys.dart';
-import '../../../product/widgets/buttons/primary_button_widget.dart';
-import '../../../product/widgets/radio/gender_radio_widget.dart';
+import '../../../core/values/localkeys/app_localkeys.dart';
+import '../../../core/widgets/buttons/primary_button_widget.dart';
+import '../../../core/widgets/radio/gender_radio_widget.dart';
 import '../services/profile_service.dart';
 
+@RoutePage()
 class EditProfileView extends StatefulWidget {
   const EditProfileView({
     super.key,

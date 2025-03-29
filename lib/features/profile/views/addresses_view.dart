@@ -1,14 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../product/values/colors/app_colors.dart';
-import '../../../product/values/paths/app_paths.dart';
+import '../../../core/router/app_route_enum.dart';
+import '../../../core/router/app_router.gr.dart';
+import '../../../core/values/paths/app_paths.dart';
+import '../../../core/widgets/buttons/bordered_button_widget.dart';
 import '../models/address_model.dart';
 import '../services/profile_service.dart';
-import 'add_addresses_view.dart';
 
+@RoutePage()
 class AddressesView extends StatefulWidget {
   const AddressesView({super.key});
 
@@ -30,14 +33,10 @@ class _AddressesViewState extends State<AddressesView> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: BorderedButtonWidget(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddAddressView(),
-                ),
-              ).then(
-                (_) => setState(() {}),
-              ),
+              onPressed: () =>
+                  context.router.pushPath(AppRoute.addAddresses.path).then(
+                        (_) => setState(() {}),
+                      ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -110,27 +109,26 @@ class _AddressesViewState extends State<AddressesView> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   TextButton(
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AddAddressView(
-                                          id: defaultAddress.id,
-                                          userFK: defaultAddress.userFK,
-                                          title: defaultAddress.title,
-                                          name: defaultAddress.name,
-                                          phone: defaultAddress.phoneNumber,
-                                          streetDetails:
-                                              defaultAddress.streetDetails,
-                                          zipcode: defaultAddress.zipcode,
-                                          state: defaultAddress.state,
-                                          city: defaultAddress.city,
-                                          isDefault: defaultAddress.isDefault,
-                                          edit: true,
+                                    onPressed: () => context.router
+                                        .push(
+                                          AddAddressesRoute(
+                                            id: defaultAddress.id,
+                                            userFK: defaultAddress.userFK,
+                                            title: defaultAddress.title,
+                                            name: defaultAddress.name,
+                                            phone: defaultAddress.phoneNumber,
+                                            streetDetails:
+                                                defaultAddress.streetDetails,
+                                            zipcode: defaultAddress.zipcode,
+                                            state: defaultAddress.state,
+                                            city: defaultAddress.city,
+                                            isDefault: defaultAddress.isDefault,
+                                            edit: true,
+                                          ),
+                                        )
+                                        .then(
+                                          (_) => setState(() {}),
                                         ),
-                                      ),
-                                    ).then(
-                                      (_) => setState(() {}),
-                                    ),
                                     child: Row(
                                       spacing: 8,
                                       children: [
@@ -247,30 +245,29 @@ class _AddressesViewState extends State<AddressesView> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               TextButton(
-                                                onPressed: () => Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AddAddressView(
-                                                      id: address?.id,
-                                                      userFK: address?.userFK,
-                                                      title: address?.title,
-                                                      name: address?.name,
-                                                      phone:
-                                                          address?.phoneNumber,
-                                                      streetDetails: address
-                                                          ?.streetDetails,
-                                                      zipcode: address?.zipcode,
-                                                      state: address?.state,
-                                                      city: address?.city,
-                                                      isDefault:
-                                                          address?.isDefault,
-                                                      edit: true,
+                                                onPressed: () => context.router
+                                                    .push(
+                                                      AddAddressesRoute(
+                                                        id: address?.id,
+                                                        userFK: address?.userFK,
+                                                        title: address?.title,
+                                                        name: address?.name,
+                                                        phone: address
+                                                            ?.phoneNumber,
+                                                        streetDetails: address
+                                                            ?.streetDetails,
+                                                        zipcode:
+                                                            address?.zipcode,
+                                                        state: address?.state,
+                                                        city: address?.city,
+                                                        isDefault:
+                                                            address?.isDefault,
+                                                        edit: true,
+                                                      ),
+                                                    )
+                                                    .then(
+                                                      (_) => setState(() {}),
                                                     ),
-                                                  ),
-                                                ).then(
-                                                  (_) => setState(() {}),
-                                                ),
                                                 child: Row(
                                                   spacing: 8,
                                                   children: [
@@ -369,34 +366,6 @@ class _AddressesViewState extends State<AddressesView> {
           }
         },
       ),
-    );
-  }
-}
-
-class BorderedButtonWidget extends StatelessWidget {
-  const BorderedButtonWidget({
-    super.key,
-    required this.onPressed,
-    required this.child,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        side: const BorderSide(
-          color: AppColors.background,
-          width: 1.5,
-        ),
-      ),
-      child: child,
     );
   }
 }

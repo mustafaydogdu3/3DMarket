@@ -1,7 +1,7 @@
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../product/values/colors/app_colors.dart';
+import '../../../../core/values/colors/app_colors.dart';
 import '../../models/category_model.dart';
 
 class ImageTextButtonWidget extends StatelessWidget {

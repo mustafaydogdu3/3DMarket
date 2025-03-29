@@ -1,9 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/router/app_router.gr.dart';
 import '../../models/product_model.dart';
 import '../../services/home_service.dart';
-import '../product_details_view.dart';
 
 class SuggestionProductsWidget extends StatefulWidget {
   const SuggestionProductsWidget({super.key});
@@ -65,13 +66,9 @@ class _SuggestionProductsWidgetState extends State<SuggestionProductsWidget> {
                   final interestProduct = interestProducts?[index];
 
                   return RawMaterialButton(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductDetailsView(
-                            product: interestProduct!,
-                          ),
-                        )),
+                    onPressed: () => context.router.push(ProductDetailsRoute(
+                      product: interestProduct!,
+                    )),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
