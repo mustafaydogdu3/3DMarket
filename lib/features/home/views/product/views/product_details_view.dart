@@ -32,11 +32,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     return AppScaffoldWidget(
       actions: [
         IconButton(
-          onPressed: () {
-            context.router.push(WriteReviewRoute(
-              product: widget.product,
-            ));
-          },
+          onPressed: () {},
           icon: const Icon(BoxIcons.bx_heart),
         ),
         IconButton(
