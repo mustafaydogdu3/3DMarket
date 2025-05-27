@@ -11,12 +11,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i12;
 import 'package:flutter/material.dart' as _i13;
+import 'package:market3d/features/auth/models/user_model.dart' as _i14;
 import 'package:market3d/features/auth/views/forgot_password/forgot_password_view.dart'
     as _i5;
 import 'package:market3d/features/auth/views/home/auth_home_view.dart' as _i3;
 import 'package:market3d/features/auth/views/instrest/interest_view.dart'
     as _i7;
-import 'package:market3d/features/home/models/product_model.dart' as _i14;
+import 'package:market3d/features/home/models/product_model.dart' as _i15;
 import 'package:market3d/features/home/views/home_nav/home_nav_view.dart'
     as _i6;
 import 'package:market3d/features/home/views/product/views/product_details_view.dart'
@@ -174,20 +175,11 @@ class AuthHomeRoute extends _i12.PageRouteInfo<void> {
 class EditProfileRoute extends _i12.PageRouteInfo<EditProfileRouteArgs> {
   EditProfileRoute({
     _i13.Key? key,
-    required String name,
-    required String email,
-    required String phone,
-    required String gender,
+    required _i14.UserModel user,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          EditProfileRoute.name,
-         args: EditProfileRouteArgs(
-           key: key,
-           name: name,
-           email: email,
-           phone: phone,
-           gender: gender,
-         ),
+         args: EditProfileRouteArgs(key: key, user: user),
          initialChildren: children,
        );
 
@@ -197,39 +189,21 @@ class EditProfileRoute extends _i12.PageRouteInfo<EditProfileRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<EditProfileRouteArgs>();
-      return _i4.EditProfileView(
-        key: args.key,
-        name: args.name,
-        email: args.email,
-        phone: args.phone,
-        gender: args.gender,
-      );
+      return _i4.EditProfileView(key: args.key, user: args.user);
     },
   );
 }
 
 class EditProfileRouteArgs {
-  const EditProfileRouteArgs({
-    this.key,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.gender,
-  });
+  const EditProfileRouteArgs({this.key, required this.user});
 
   final _i13.Key? key;
 
-  final String name;
-
-  final String email;
-
-  final String phone;
-
-  final String gender;
+  final _i14.UserModel user;
 
   @override
   String toString() {
-    return 'EditProfileRouteArgs{key: $key, name: $name, email: $email, phone: $phone, gender: $gender}';
+    return 'EditProfileRouteArgs{key: $key, user: $user}';
   }
 }
 
@@ -302,7 +276,7 @@ class MyProfileRoute extends _i12.PageRouteInfo<void> {
 class ProductDetailsRoute extends _i12.PageRouteInfo<ProductDetailsRouteArgs> {
   ProductDetailsRoute({
     _i13.Key? key,
-    required _i14.ProductModel product,
+    required _i15.ProductModel product,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          ProductDetailsRoute.name,
@@ -326,7 +300,7 @@ class ProductDetailsRouteArgs {
 
   final _i13.Key? key;
 
-  final _i14.ProductModel product;
+  final _i15.ProductModel product;
 
   @override
   String toString() {
@@ -355,7 +329,7 @@ class SplashRoute extends _i12.PageRouteInfo<void> {
 class WriteReviewRoute extends _i12.PageRouteInfo<WriteReviewRouteArgs> {
   WriteReviewRoute({
     _i13.Key? key,
-    required _i14.ProductModel product,
+    required _i15.ProductModel product,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          WriteReviewRoute.name,
@@ -379,7 +353,7 @@ class WriteReviewRouteArgs {
 
   final _i13.Key? key;
 
-  final _i14.ProductModel product;
+  final _i15.ProductModel product;
 
   @override
   String toString() {

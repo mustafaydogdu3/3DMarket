@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'sortby_modal.dart';
+import '../../widgets/filter_widget.dart';
 
 class FilterModal extends StatefulWidget {
   const FilterModal({
     super.key,
+    required this.selectedFilter,
     required this.onSelect,
   });
 
-  final dynamic Function(String? selectedFilter)? onSelect;
+  final String selectedFilter;
+  final Function(String? selectedFilter)? onSelect;
 
   @override
   State<FilterModal> createState() => _FilterModalState();
@@ -27,9 +29,10 @@ class _FilterModalState extends State<FilterModal> {
 
   @override
   Widget build(BuildContext context) {
-    return SortByWidget(
+    return FilterWidget(
       list: filterList,
       text: text,
+      selectedFilter: widget.selectedFilter,
       onSelect: widget.onSelect,
     );
   }

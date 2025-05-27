@@ -32,7 +32,6 @@ class AppScaffoldWidget extends StatefulWidget {
 class AppScaffoldWidgetState extends State<AppScaffoldWidget> {
   int currentIndex = 0;
 
-  // Sayfa değiştirme metodu eklendi
   void changeTab(int index) {
     if (widget.views != null) {
       if (index >= 0 && index < widget.views!.length) {
@@ -45,7 +44,6 @@ class AppScaffoldWidgetState extends State<AppScaffoldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold key eklendi
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return PopScope(

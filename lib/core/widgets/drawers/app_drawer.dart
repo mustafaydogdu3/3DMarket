@@ -43,11 +43,14 @@ class AppDrawer extends StatelessWidget {
                               CircleAvatar(
                                 radius: 40,
                                 child: ClipOval(
-                                  child: user?.photoUrl != null
-                                      ? Image.network(user!.photoUrl!)
-                                      : Image.asset(
-                                          'assets/images/png/profil.png',
-                                        ),
+                                  child: Image.network(
+                                    user?.photoUrl ?? '',
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Column(

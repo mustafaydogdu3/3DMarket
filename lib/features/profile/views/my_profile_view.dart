@@ -8,6 +8,7 @@ import '../../../core/router/app_route_enum.dart';
 import '../../../core/router/app_router.gr.dart';
 import '../../../core/values/localkeys/app_localkeys.dart';
 import '../../../core/values/paths/app_paths.dart';
+import '../../auth/models/user_model.dart';
 import '../services/profile_service.dart';
 import 'widgets/profile_fields_widget.dart';
 
@@ -54,10 +55,7 @@ class _MyProfileViewState extends State<MyProfileView> {
                     onPressed: () => context.router
                         .push(
                           EditProfileRoute(
-                            email: user?.email ?? '',
-                            gender: user?.gender ?? '',
-                            name: user?.name ?? '',
-                            phone: user?.phoneNumber ?? '',
+                            user: user ?? UserModel.empty(),
                           ),
                         )
                         .then(

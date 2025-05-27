@@ -2,25 +2,21 @@ import 'package:auto_route/annotations.dart';
 import 'package:core/base/text/style/base_text_style.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/values/colors/app_colors.dart';
 import '../../../core/values/localkeys/app_localkeys.dart';
 import '../../../core/widgets/buttons/primary_button_widget.dart';
 import '../../../core/widgets/radio/gender_radio_widget.dart';
+import '../../auth/models/user_model.dart';
 import '../services/profile_service.dart';
 
 @RoutePage()
 class EditProfileView extends StatefulWidget {
   const EditProfileView({
     super.key,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.gender,
+    required this.user,
   });
 
-  final String name;
-  final String email;
-  final String phone;
-  final String gender;
+  final UserModel user;
 
   @override
   State<EditProfileView> createState() => _EditProfileViewState();
@@ -31,10 +27,10 @@ class _EditProfileViewState extends State<EditProfileView> {
   void initState() {
     super.initState();
 
-    nameController.text = widget.name;
-    emailController.text = widget.email;
-    phoneController.text = widget.phone;
-    gender = widget.gender;
+    nameController.text = widget.user.name ?? '';
+    emailController.text = widget.user.email ?? '';
+    phoneController.text = widget.user.phoneNumber ?? '';
+    gender = widget.user.gender;
   }
 
   final TextEditingController nameController = TextEditingController();
@@ -48,7 +44,6 @@ class _EditProfileViewState extends State<EditProfileView> {
       appBar: AppBar(
         title: const Text(AppLocalkeys.editProfile),
       ),
-      // drawer: const AppDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -60,24 +55,26 @@ class _EditProfileViewState extends State<EditProfileView> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    child: Image.asset('assets/images/png/profil.png'),
+                    child: ClipOval(
+                      child: widget.user.photoUrl != null
+                          ? Image.network(widget.user.photoUrl!)
+                          : Image.asset('assets/images/png/profil.png'),
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: IconButton(
                       icon: const CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.background,
                         radius: 16,
                         child: Icon(
                           Icons.edit,
-                          color: Colors.blue,
+                          color: Colors.white,
                           size: 18,
                         ),
                       ),
-                      onPressed: () {
-                        // Change profile picture action
-                      },
+                      onPressed: () {},
                     ),
                   ),
                 ],

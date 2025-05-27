@@ -15,11 +15,9 @@ class HomeNavView extends StatefulWidget {
 }
 
 class _HomeNavViewState extends State<HomeNavView> {
-  // Scaffold widget'ına referans oluşturuyoruz
   final GlobalKey<AppScaffoldWidgetState> _scaffoldKey =
       GlobalKey<AppScaffoldWidgetState>();
 
-  // Tab değiştirme metodu
   void navigateToTab(int index) {
     _scaffoldKey.currentState?.changeTab(index);
   }

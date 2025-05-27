@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../auth/models/user/user_model.dart';
+import '../../auth/models/user_model.dart';
 import '../models/address_model.dart';
 
 class ProfileService {

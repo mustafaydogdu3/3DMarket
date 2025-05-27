@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../auth/models/user/user_model.dart';
+import '../../auth/models/user_model.dart';
 
 class ReviewModel extends Equatable {
   const ReviewModel({

@@ -18,16 +18,17 @@ class ReviewsModal extends StatefulWidget {
 }
 
 class _ReviewsModalState extends State<ReviewsModal> {
-  String filter = '';
+  String filter = 'All Star';
 
   @override
   Widget build(BuildContext context) {
-    List<ReviewModel> filteredReviews = filter.isNotEmpty
-        ? widget.reviews.where((review) {
-            final where = review.rating == double.tryParse(filter);
-            return where;
-          }).toList()
-        : widget.reviews;
+    List<ReviewModel> filteredReviews =
+        filter.isNotEmpty && filter != 'All Star'
+            ? widget.reviews.where((review) {
+                final where = review.rating == double.tryParse(filter);
+                return where;
+              }).toList()
+            : widget.reviews;
 
     final deviceHeight = MediaQuery.of(context).size.height +
         View.of(context).viewPadding.top +
@@ -113,15 +114,17 @@ class _ReviewsModalState extends State<ReviewsModal> {
                                     context: context,
                                     backgroundColor: Colors.transparent,
                                     builder: (context) => FilterModal(
+                                      selectedFilter: filter,
                                       onSelect: (selectedFilter) {
-                                        if (selectedFilter == 'All Star') {
-                                          filter = '';
-                                        } else if (selectedFilter != null &&
-                                            selectedFilter.isNotEmpty) {
-                                          filter = selectedFilter.split(' ')[0];
-                                        }
-
-                                        setState(() {});
+                                        setState(() {
+                                          if (selectedFilter == 'All Star') {
+                                            filter = 'All Star';
+                                          } else if (selectedFilter != null &&
+                                              selectedFilter.isNotEmpty) {
+                                            filter =
+                                                selectedFilter.split(' ')[0];
+                                          }
+                                        });
                                       },
                                     ),
                                   );
